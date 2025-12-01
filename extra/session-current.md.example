@@ -1,0 +1,110 @@
+# Current Session - YYYY-MM-DD
+
+## Active Work
+
+**Project**: project-name
+**Focus**: Feature implementation / Planning / Documentation
+**Status**: [Brief status description]
+
+---
+
+## Completed Today
+
+### Morning Session
+- ✅ Completed item 1
+- ✅ Completed item 2
+- ✅ Key milestone achieved
+
+### Afternoon Session
+- ✅ Additional completions
+- ✅ Documentation updates
+- ✅ Tests passing
+
+---
+
+## Key Insights & Clarifications
+
+### Discovery: [Key finding]
+
+**What we learned**: Brief description of important insight
+
+**Example:**
+```
+[Code or data example]
+```
+
+**Implication**: How this affects the project
+
+### Architecture Decision: [Decision name]
+
+**Decision**: What was decided
+
+**Rationale**: Why this approach was chosen
+
+**Alternatives Considered**: Other options and why they were rejected
+
+---
+
+## Current Status
+
+### Phase [N]: [Phase Name] - [Status]
+
+**Priority 1 - [Category]:**
+- **F[XXX]**: Feature description (status)
+- **F[XXX]**: Feature description (status)
+
+**Priority 2 - [Category]:**
+- **F[XXX]**: Feature description (status)
+
+---
+
+## Next Session Priorities
+
+### Immediate
+1. **Task 1** - Brief description
+2. **Task 2** - Brief description
+3. **Task 3** - Brief description
+
+### Optional (if time permits)
+- Additional task
+- Nice-to-have item
+
+---
+
+## Technical Debt / Fixes Needed
+
+### Database
+1. **Table name**: Description of needed migration
+
+### Code
+1. **Component/Service**: Description of needed refactor
+
+### Tests
+1. **Test suite**: Description of needed test coverage
+
+---
+
+## Quick Commands
+
+```bash
+# Start development server
+cd ~/workspace/projects/project-name && [start command]
+
+# Run tests
+cd ~/workspace/projects/project-name && [test command]
+
+# Check feature status
+cat ~/workspace/projects/project-name/features.json | jq '.summary'
+```
+
+---
+
+## Notes
+
+- Important context for next session
+- Links to relevant documentation
+- Reminders about gotchas or edge cases
+
+---
+
+**Last Updated**: YYYY-MM-DD HH:MM

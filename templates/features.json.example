@@ -1,0 +1,490 @@
+{
+  "$schema": "./features.schema.json",
+  "project": "project-name",
+  "repository": "~/workspace/projects/project-name",
+  "phase": "Phase 1 - Foundation",
+  "updated": "2025-11-30T14:00:00Z",
+  "updatedBy": "agent",
+  "summary": {
+    "totalFeatures": 8,
+    "completed": 2,
+    "inProgress": 1,
+    "pending": 5,
+    "percentComplete": 31
+  },
+  "features": [
+    {
+      "id": "F001",
+      "name": "Database Schema Design",
+      "description": "Design and implement core database schema with entity relationships",
+      "status": "completed",
+      "priority": "critical",
+      "progress": 100,
+      "estimatedEffort": "small",
+      "actualEffort": "4h",
+      "definitionDoc": "docs/features/01-database-schema.md",
+      "dependencies": [],
+      "blockers": [],
+      "files": [
+        "migrations/001_create_core_schema.sql",
+        "docs/data-model/schema-diagram.md"
+      ],
+      "tests": [
+        "tests/schema/test_migrations.sql",
+        "tests/schema/test_relationships.sql"
+      ],
+      "acceptanceCriteria": [
+        "All core entities created with proper types",
+        "Relationships defined with foreign keys",
+        "Indexes created for performance",
+        "Migration runs successfully up and down",
+        "Test data can be inserted and queried"
+      ],
+      "subtasks": [
+        {
+          "id": "F001.1",
+          "name": "Design entity models and relationships",
+          "status": "completed",
+          "estimatedTime": "1.5h",
+          "actualTime": "1.5h"
+        },
+        {
+          "id": "F001.2",
+          "name": "Create migration SQL with constraints",
+          "status": "completed",
+          "estimatedTime": "1.5h",
+          "actualTime": "2h"
+        },
+        {
+          "id": "F001.3",
+          "name": "Add indexes for query performance",
+          "status": "completed",
+          "estimatedTime": "30min",
+          "actualTime": "30min"
+        },
+        {
+          "id": "F001.4",
+          "name": "Test schema with sample data",
+          "status": "completed",
+          "estimatedTime": "1h",
+          "actualTime": "1h"
+        }
+      ],
+      "startedDate": "2025-11-25",
+      "completedDate": "2025-11-26"
+    },
+    {
+      "id": "F002",
+      "name": "API Authentication System",
+      "description": "Implement JWT-based authentication for REST API",
+      "status": "completed",
+      "priority": "critical",
+      "progress": 100,
+      "estimatedEffort": "medium",
+      "actualEffort": "7h",
+      "definitionDoc": "docs/features/02-api-authentication.md",
+      "dependencies": ["F001"],
+      "blockers": [],
+      "files": [
+        "src/api/auth.ts",
+        "src/middleware/authenticate.ts",
+        "src/services/token-service.ts"
+      ],
+      "tests": [
+        "tests/api/auth.test.ts",
+        "tests/middleware/authenticate.test.ts"
+      ],
+      "acceptanceCriteria": [
+        "Users can register with email/password",
+        "Users can login and receive JWT token",
+        "Protected endpoints require valid token",
+        "Tokens expire after configured time",
+        "Refresh token flow works"
+      ],
+      "subtasks": [
+        {
+          "id": "F002.1",
+          "name": "Implement password hashing with bcrypt",
+          "status": "completed",
+          "estimatedTime": "1h",
+          "actualTime": "1h"
+        },
+        {
+          "id": "F002.2",
+          "name": "Create registration endpoint",
+          "status": "completed",
+          "estimatedTime": "2h",
+          "actualTime": "2.5h"
+        },
+        {
+          "id": "F002.3",
+          "name": "Create login endpoint with JWT generation",
+          "status": "completed",
+          "estimatedTime": "2h",
+          "actualTime": "2h"
+        },
+        {
+          "id": "F002.4",
+          "name": "Implement authentication middleware",
+          "status": "completed",
+          "estimatedTime": "1.5h",
+          "actualTime": "1.5h"
+        }
+      ],
+      "externalTracking": {
+        "system": "github",
+        "issueNumber": 12,
+        "issueUrl": "https://github.com/user/project-name/issues/12",
+        "issueState": "closed",
+        "lastSyncedAt": "2025-11-27T10:00:00Z"
+      },
+      "startedDate": "2025-11-26",
+      "completedDate": "2025-11-27"
+    },
+    {
+      "id": "F003",
+      "name": "User Profile Management",
+      "description": "Allow users to view and edit their profile information",
+      "status": "in_progress",
+      "priority": "high",
+      "progress": 60,
+      "estimatedEffort": "medium",
+      "actualEffort": null,
+      "definitionDoc": "docs/features/03-user-profile.md",
+      "dependencies": ["F002"],
+      "blockers": [],
+      "files": [
+        "src/api/profile.ts",
+        "src/validators/profile-validator.ts"
+      ],
+      "tests": [
+        "tests/api/profile.test.ts"
+      ],
+      "acceptanceCriteria": [
+        "Users can view their profile",
+        "Users can update name and email",
+        "Email validation prevents duplicates",
+        "Profile changes are persisted",
+        "Appropriate error messages shown"
+      ],
+      "subtasks": [
+        {
+          "id": "F003.1",
+          "name": "Create GET /api/profile endpoint",
+          "status": "completed",
+          "estimatedTime": "1h",
+          "actualTime": "1h"
+        },
+        {
+          "id": "F003.2",
+          "name": "Create PUT /api/profile endpoint",
+          "status": "completed",
+          "estimatedTime": "2h",
+          "actualTime": "2.5h"
+        },
+        {
+          "id": "F003.3",
+          "name": "Implement validation rules",
+          "status": "in_progress",
+          "estimatedTime": "1.5h",
+          "actualTime": null
+        },
+        {
+          "id": "F003.4",
+          "name": "Write comprehensive tests",
+          "status": "pending",
+          "estimatedTime": "2h",
+          "actualTime": null
+        }
+      ],
+      "externalTracking": {
+        "system": "github",
+        "issueNumber": 15,
+        "issueUrl": "https://github.com/user/project-name/issues/15",
+        "issueState": "open",
+        "lastSyncedAt": "2025-11-30T09:00:00Z"
+      },
+      "startedDate": "2025-11-29",
+      "completedDate": null
+    },
+    {
+      "id": "F004",
+      "name": "Data Export Feature",
+      "description": "Allow users to export their data in CSV and JSON formats",
+      "status": "pending",
+      "priority": "medium",
+      "progress": 0,
+      "estimatedEffort": "medium",
+      "actualEffort": null,
+      "definitionDoc": "docs/features/04-data-export.md",
+      "dependencies": ["F002"],
+      "blockers": [],
+      "files": [],
+      "tests": [],
+      "acceptanceCriteria": [
+        "Users can trigger data export",
+        "Export supports CSV and JSON formats",
+        "Large exports are queued in background",
+        "Users receive notification when ready",
+        "Download links expire after 7 days"
+      ],
+      "subtasks": [
+        {
+          "id": "F004.1",
+          "name": "Create export job queue system",
+          "status": "pending",
+          "estimatedTime": "2h"
+        },
+        {
+          "id": "F004.2",
+          "name": "Implement CSV export logic",
+          "status": "pending",
+          "estimatedTime": "2h"
+        },
+        {
+          "id": "F004.3",
+          "name": "Implement JSON export logic",
+          "status": "pending",
+          "estimatedTime": "1h"
+        },
+        {
+          "id": "F004.4",
+          "name": "Add notification system",
+          "status": "pending",
+          "estimatedTime": "1.5h"
+        }
+      ],
+      "startedDate": null,
+      "completedDate": null
+    },
+    {
+      "id": "F005",
+      "name": "Admin Dashboard",
+      "description": "Create admin interface for user management and system monitoring",
+      "status": "pending",
+      "priority": "high",
+      "progress": 0,
+      "estimatedEffort": "large",
+      "actualEffort": null,
+      "definitionDoc": "docs/features/05-admin-dashboard.md",
+      "dependencies": ["F002", "F003"],
+      "blockers": [],
+      "files": [],
+      "tests": [],
+      "acceptanceCriteria": [
+        "Admins can view user list with pagination",
+        "Admins can search and filter users",
+        "Admins can view system metrics",
+        "Admins can perform basic user management",
+        "Dashboard is responsive and performant"
+      ],
+      "subtasks": [
+        {
+          "id": "F005.1",
+          "name": "Set up admin UI framework",
+          "status": "pending",
+          "estimatedTime": "3h"
+        },
+        {
+          "id": "F005.2",
+          "name": "Create user list view with pagination",
+          "status": "pending",
+          "estimatedTime": "4h"
+        },
+        {
+          "id": "F005.3",
+          "name": "Implement search and filters",
+          "status": "pending",
+          "estimatedTime": "3h"
+        },
+        {
+          "id": "F005.4",
+          "name": "Add system metrics dashboard",
+          "status": "pending",
+          "estimatedTime": "4h"
+        },
+        {
+          "id": "F005.5",
+          "name": "Create user management actions",
+          "status": "pending",
+          "estimatedTime": "3h"
+        }
+      ],
+      "startedDate": null,
+      "completedDate": null
+    },
+    {
+      "id": "F006",
+      "name": "Email Notification System",
+      "description": "Implement email notifications for key user actions",
+      "status": "pending",
+      "priority": "medium",
+      "progress": 0,
+      "estimatedEffort": "medium",
+      "actualEffort": null,
+      "definitionDoc": "docs/features/06-email-notifications.md",
+      "dependencies": [],
+      "blockers": [
+        {
+          "id": "B001",
+          "description": "Need to decide on email service provider",
+          "severity": "high",
+          "status": "investigating",
+          "createdDate": "2025-11-29",
+          "resolvedDate": null,
+          "externalTracking": {
+            "system": "github",
+            "issueNumber": 18,
+            "issueUrl": "https://github.com/user/project-name/issues/18"
+          }
+        }
+      ],
+      "files": [],
+      "tests": [],
+      "acceptanceCriteria": [
+        "Welcome email sent on registration",
+        "Password reset email flow works",
+        "Export ready notification sent",
+        "Email templates are configurable",
+        "Emails render correctly across clients"
+      ],
+      "subtasks": [
+        {
+          "id": "F006.1",
+          "name": "Set up email service integration",
+          "status": "pending",
+          "estimatedTime": "2h"
+        },
+        {
+          "id": "F006.2",
+          "name": "Create email templates",
+          "status": "pending",
+          "estimatedTime": "3h"
+        },
+        {
+          "id": "F006.3",
+          "name": "Implement notification triggers",
+          "status": "pending",
+          "estimatedTime": "2h"
+        }
+      ],
+      "startedDate": null,
+      "completedDate": null
+    },
+    {
+      "id": "F007",
+      "name": "Search Functionality",
+      "description": "Add full-text search across user data",
+      "status": "pending",
+      "priority": "low",
+      "progress": 0,
+      "estimatedEffort": "large",
+      "actualEffort": null,
+      "definitionDoc": "docs/features/07-search.md",
+      "dependencies": ["F001"],
+      "blockers": [],
+      "files": [],
+      "tests": [],
+      "acceptanceCriteria": [
+        "Users can search by keywords",
+        "Search returns relevant results",
+        "Search is performant (<500ms)",
+        "Results are paginated",
+        "Advanced filters available"
+      ],
+      "subtasks": [
+        {
+          "id": "F007.1",
+          "name": "Choose and integrate search solution",
+          "status": "pending",
+          "estimatedTime": "4h"
+        },
+        {
+          "id": "F007.2",
+          "name": "Index existing data",
+          "status": "pending",
+          "estimatedTime": "3h"
+        },
+        {
+          "id": "F007.3",
+          "name": "Build search API endpoint",
+          "status": "pending",
+          "estimatedTime": "4h"
+        },
+        {
+          "id": "F007.4",
+          "name": "Implement search UI",
+          "status": "pending",
+          "estimatedTime": "5h"
+        }
+      ],
+      "startedDate": null,
+      "completedDate": null
+    },
+    {
+      "id": "F008",
+      "name": "API Rate Limiting",
+      "description": "Implement rate limiting to prevent API abuse",
+      "status": "pending",
+      "priority": "high",
+      "progress": 0,
+      "estimatedEffort": "small",
+      "actualEffort": null,
+      "definitionDoc": "docs/features/08-rate-limiting.md",
+      "dependencies": ["F002"],
+      "blockers": [],
+      "files": [],
+      "tests": [],
+      "acceptanceCriteria": [
+        "Rate limits configurable per endpoint",
+        "Limits enforced correctly",
+        "Appropriate error messages returned",
+        "Rate limit headers included in responses",
+        "Admin endpoints have different limits"
+      ],
+      "subtasks": [
+        {
+          "id": "F008.1",
+          "name": "Choose rate limiting strategy",
+          "status": "pending",
+          "estimatedTime": "30min"
+        },
+        {
+          "id": "F008.2",
+          "name": "Implement rate limiting middleware",
+          "status": "pending",
+          "estimatedTime": "2h"
+        },
+        {
+          "id": "F008.3",
+          "name": "Configure limits per endpoint",
+          "status": "pending",
+          "estimatedTime": "1h"
+        },
+        {
+          "id": "F008.4",
+          "name": "Add tests for rate limiting",
+          "status": "pending",
+          "estimatedTime": "1.5h"
+        }
+      ],
+      "startedDate": null,
+      "completedDate": null
+    }
+  ],
+  "blockers": [
+    {
+      "id": "B001",
+      "description": "Need to decide on email service provider (Sendgrid vs Resend vs AWS SES)",
+      "severity": "high",
+      "status": "investigating",
+      "createdDate": "2025-11-29",
+      "resolvedDate": null,
+      "externalTracking": {
+        "system": "github",
+        "issueNumber": 18,
+        "issueUrl": "https://github.com/user/project-name/issues/18"
+      }
+    }
+  ]
+}

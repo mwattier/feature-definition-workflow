@@ -1,0 +1,50 @@
+# Active Projects
+
+Last Updated: YYYY-MM-DD
+
+## In Active Development 🚧
+
+### project-name-1
+- **Status**: Phase N - [Phase name] (XX% complete)
+- **Location**: `~/workspace/projects/project-name-1/`
+- **Quick Start**: `cd ~/workspace/projects/project-name-1 && [command]`
+- **Context**: [.claude/context.md](./projects/project-name-1/.claude/context.md)
+- **Docs**: [PROJECT-STATUS.md](./projects/project-name-1/PROJECT-STATUS.md)
+- **Current Work**:
+  - ✅ Completed work
+  - 📋 Next: Upcoming tasks
+
+### project-name-2
+- **Status**: Phase N - XX% complete
+- **Location**: `~/workspace/projects/project-name-2/`
+- **Quick Start**: `cd ~/workspace/projects/project-name-2 && [command]`
+- **Context**: [.claude/context.md](./projects/project-name-2/.claude/context.md)
+- **Current Work**:
+  - ✅ Progress item
+  - 📋 Next: Next steps
+
+## Monitoring / Verification 🔍
+
+### project-name-3
+- Deployed to production
+- Awaiting verification period
+- **Next**: Check metrics after X days
+
+## Backlog 📋
+
+### project-name-4
+- Priority: [High/Medium/Low]
+- **Location**: `~/workspace/projects/project-name-4/`
+- **Notes**: Additional context
+
+## Recently Completed ✅
+
+### project-name-5 (YYYY-MM-DD)
+- Complete description
+- **Location**: `~/workspace/projects/project-name-5/`
+- **Status**: Delivered / Archived
+
+## Quick Navigation
+- [Current Session](./SESSION-CURRENT.md) - Today's work
+- [Recent Work](./SESSION-RECENT.md) - Last 7 days
+- [MCP Reference](./MCP-QUICK-REF.md) - MCP usage examples

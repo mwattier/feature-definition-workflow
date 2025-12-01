@@ -1,0 +1,104 @@
+# MCP Quick Reference
+
+**Config**: `~/.config/claude-code/mcp.json`
+**Last Updated**: YYYY-MM-DD
+
+## Available MCPs
+
+### mem0 (port XXXX)
+Persistent cross-session memory
+
+```bash
+# Add memory
+Using mem0, add "Session summary..." with user_id [your-id]
+
+# Search
+Using mem0, search for "session handoff" with user_id [your-id]
+
+# List recent
+Using mem0, list memories for user_id [your-id] limit 10
+```
+
+**Example usage**:
+```
+# Store decision
+Using mem0, add "Decision: [description]" with user_id [your-id]
+
+# Recall patterns
+Using mem0, search for "architecture decisions" with user_id [your-id]
+```
+
+---
+
+### postgres-project (port XXXX)
+Project database access
+
+**Projects**: project-name-1, project-name-2
+**Schemas**: `public`, `app_schema`
+
+```bash
+# Query table
+Using postgres-project, show me the [table_name] table
+
+# Check data
+Using postgres-project, select the last 10 records from [table_name]
+```
+
+---
+
+### [your-mcp-server]
+Description of what this MCP does
+
+**Features**:
+- Feature 1
+- Feature 2
+- Feature 3
+
+```bash
+# Example command
+[mcp-command] "parameter"
+```
+
+---
+
+## Session Handoff Pattern
+
+**End of session**:
+```bash
+Using mem0, add "Session YYYY-MM-DD: Completed X, Y, Z. Next: A, B, C. No blockers." with user_id [your-id]
+```
+
+**Start of session**:
+```bash
+Using mem0, search for "session handoff" with user_id [your-id] limit 3
+```
+
+---
+
+## Configuration Location
+
+All MCP servers configured in:
+```
+~/.config/claude-code/mcp.json
+```
+
+**Remember**: Restart Claude Code after config changes!
+
+---
+
+## Troubleshooting
+
+**MCP not working?**
+1. Check server is running: `ps aux | grep [server-name]`
+2. Check port is correct: `lsof -i :[port]`
+3. Restart Claude Code
+4. Check mcp.json syntax
+
+**Database connection issues?**
+1. Verify database is running
+2. Check port mapping
+3. Verify credentials in mcp.json
+
+---
+
+**Quick Reference**: Keep this file concise for fast reference

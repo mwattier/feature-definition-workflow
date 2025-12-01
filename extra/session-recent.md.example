@@ -1,0 +1,31 @@
+# Recent Work - Last 7 Days
+
+## Week of YYYY-MM-DD
+
+### Project Name 1 (Completed YYYY-MM-DD)
+- ✅ Completed major milestone
+- ✅ Key deliverable shipped
+- 📋 Next: Follow-up tasks
+
+### Project Name 2 (Updated YYYY-MM-DD)
+- ✅ Feature completed
+- ✅ Tests passing
+- 🚧 Feature in progress (XX% complete)
+  - ✅ Completed subtask
+  - 📋 Next: Remaining work
+- **Location**: `~/workspace/projects/project-name-2/`
+
+### Project Name 3 (Monitoring - YYYY-MM-DD)
+- ✅ Deployed to production
+- ⏳ Verification period: X days
+- 📋 Next: Check monitoring data
+
+## Important Decisions
+- **YYYY-MM-DD**: Decision description
+  - Rationale and context
+  - Impact on projects
+
+## Upcoming
+- Priority 1: Most important next task
+- Priority 2: Secondary priority
+- Priority 3: Nice-to-have task

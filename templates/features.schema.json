@@ -1,0 +1,269 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://example.com/features.schema.json",
+  "title": "Feature Tracking Schema",
+  "description": "Schema for tracking feature implementation progress",
+  "type": "object",
+  "required": ["project", "features"],
+  "properties": {
+    "project": {
+      "type": "string",
+      "description": "Project name"
+    },
+    "repository": {
+      "type": "string",
+      "description": "Repository path or URL"
+    },
+    "phase": {
+      "type": "string",
+      "description": "Current project phase"
+    },
+    "updated": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Last update timestamp"
+    },
+    "updatedBy": {
+      "type": "string",
+      "description": "Who made the last update (human or agent)"
+    },
+    "summary": {
+      "type": "object",
+      "properties": {
+        "totalFeatures": {"type": "integer"},
+        "completed": {"type": "integer"},
+        "inProgress": {"type": "integer"},
+        "pending": {"type": "integer"},
+        "percentComplete": {"type": "number"}
+      }
+    },
+    "features": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/feature"
+      }
+    },
+    "phases": {
+      "type": "array",
+      "description": "Hierarchical structure for large projects",
+      "items": {
+        "$ref": "#/definitions/phase"
+      }
+    },
+    "blockers": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/blocker"
+      }
+    }
+  },
+  "definitions": {
+    "feature": {
+      "type": "object",
+      "required": ["id", "name", "status"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^F[0-9]{3,}$",
+          "description": "Feature ID (e.g., F001, F002)"
+        },
+        "name": {
+          "type": "string",
+          "description": "Feature name"
+        },
+        "description": {
+          "type": "string",
+          "description": "Detailed description"
+        },
+        "status": {
+          "type": "string",
+          "enum": ["pending", "in_progress", "blocked", "completed", "descoped"],
+          "description": "Current status"
+        },
+        "priority": {
+          "type": "string",
+          "enum": ["critical", "high", "medium", "low"],
+          "description": "Feature priority"
+        },
+        "progress": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 100,
+          "description": "Completion percentage"
+        },
+        "estimatedEffort": {
+          "type": "string",
+          "enum": ["small", "medium", "large", "xlarge"],
+          "description": "Effort estimate"
+        },
+        "actualEffort": {
+          "type": ["string", "null"],
+          "description": "Actual time taken"
+        },
+        "definitionDoc": {
+          "type": "string",
+          "description": "Path to feature definition document"
+        },
+        "dependencies": {
+          "type": "array",
+          "items": {"type": "string"},
+          "description": "Feature IDs this depends on"
+        },
+        "blockers": {
+          "type": "array",
+          "items": {"$ref": "#/definitions/blocker"}
+        },
+        "files": {
+          "type": "array",
+          "items": {"type": "string"},
+          "description": "Files created/modified for this feature"
+        },
+        "tests": {
+          "type": "array",
+          "items": {"type": "string"},
+          "description": "Test files for this feature"
+        },
+        "acceptanceCriteria": {
+          "type": "array",
+          "items": {"type": "string"},
+          "description": "Criteria that must be met for completion"
+        },
+        "subtasks": {
+          "type": "array",
+          "items": {"$ref": "#/definitions/subtask"}
+        },
+        "externalTracking": {
+          "type": "object",
+          "description": "Link to external issue tracker",
+          "properties": {
+            "system": {"type": "string"},
+            "issueNumber": {"type": "integer"},
+            "issueUrl": {"type": "string"},
+            "issueState": {"type": "string"},
+            "lastSyncedAt": {"type": "string", "format": "date-time"}
+          }
+        },
+        "startedDate": {
+          "type": ["string", "null"],
+          "format": "date"
+        },
+        "completedDate": {
+          "type": ["string", "null"],
+          "format": "date"
+        },
+        "addedMidPhase": {
+          "type": "boolean",
+          "description": "Whether this was added after initial planning"
+        },
+        "rationale": {
+          "type": "string",
+          "description": "Why this feature exists or was added"
+        }
+      }
+    },
+    "subtask": {
+      "type": "object",
+      "required": ["id", "name", "status"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^F[0-9]{3,}\\.[0-9]+$",
+          "description": "Subtask ID (e.g., F001.1, F001.2)"
+        },
+        "name": {
+          "type": "string",
+          "description": "Subtask name"
+        },
+        "status": {
+          "type": "string",
+          "enum": ["pending", "in_progress", "completed"]
+        },
+        "estimatedTime": {
+          "type": "string",
+          "description": "Estimated time (e.g., '2h', '30min')"
+        },
+        "actualTime": {
+          "type": ["string", "null"],
+          "description": "Actual time taken"
+        }
+      }
+    },
+    "blocker": {
+      "type": "object",
+      "required": ["id", "description"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^B[0-9]{3,}$"
+        },
+        "description": {
+          "type": "string"
+        },
+        "severity": {
+          "type": "string",
+          "enum": ["low", "medium", "high", "critical"]
+        },
+        "status": {
+          "type": "string",
+          "enum": ["open", "investigating", "resolved"]
+        },
+        "createdDate": {
+          "type": "string",
+          "format": "date"
+        },
+        "resolvedDate": {
+          "type": ["string", "null"],
+          "format": "date"
+        },
+        "externalTracking": {
+          "type": "object",
+          "properties": {
+            "system": {"type": "string"},
+            "issueNumber": {"type": "integer"},
+            "issueUrl": {"type": "string"}
+          }
+        }
+      }
+    },
+    "phase": {
+      "type": "object",
+      "required": ["id", "name", "epics"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^P[0-9]+$"
+        },
+        "name": {"type": "string"},
+        "description": {"type": "string"},
+        "status": {
+          "type": "string",
+          "enum": ["pending", "in_progress", "completed"]
+        },
+        "epics": {
+          "type": "array",
+          "items": {"$ref": "#/definitions/epic"}
+        }
+      }
+    },
+    "epic": {
+      "type": "object",
+      "required": ["id", "name", "features"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^E[0-9]+\\.[0-9]+$"
+        },
+        "name": {"type": "string"},
+        "description": {"type": "string"},
+        "status": {
+          "type": "string",
+          "enum": ["pending", "in_progress", "completed"]
+        },
+        "features": {
+          "type": "array",
+          "items": {"$ref": "#/definitions/feature"}
+        }
+      }
+    }
+  }
+}
