@@ -10,16 +10,16 @@ Python script for validating features.json structure and content.
 
 ### Features
 
-✅ **Required field checking** - Ensures all required fields are present
-✅ **Data type validation** - Verifies correct types (string, number, array, etc.)
-✅ **Enum value validation** - Checks status, priority, effort against allowed values
-✅ **Dependency checking** - Validates feature IDs exist, detects circular dependencies
-✅ **Progress consistency** - Ensures progress matches status (completed = 100%, etc.)
-✅ **Date format validation** - Validates YYYY-MM-DD format
-✅ **Subtask validation** - Checks subtask structure and required fields
-✅ **ID format checking** - Warns about non-standard ID formats
-✅ **Duplicate detection** - Finds duplicate feature IDs
-✅ **Schema validation** - Optional JSON Schema validation (requires jsonschema library)
+- ✅ **Required field checking** - Ensures all required fields are present
+- ✅ **Data type validation** - Verifies correct types (string, number, array, etc.)
+- ✅ **Enum value validation** - Checks status, priority, effort against allowed values
+- ✅ **Dependency checking** - Validates feature IDs exist, detects circular dependencies
+- ✅ **Progress consistency** - Ensures progress matches status (completed = 100%, etc.)
+- ✅ **Date format validation** - Validates YYYY-MM-DD format
+- ✅ **Subtask validation** - Checks subtask structure and required fields
+- ✅ **ID format checking** - Warns about non-standard ID formats
+- ✅ **Duplicate detection** - Finds duplicate feature IDs
+- ✅ **Schema validation** - Optional JSON Schema validation (requires jsonschema library)
 
 ### Usage
 
