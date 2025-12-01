@@ -4,6 +4,10 @@ A conversational methodology for defining software features clearly before imple
 
 **Core Principle**: 15 minutes of conversation prevents hours of rework.
 
+## My Honest Assessment
+
+I suggest reading [HONEST-ASSESSMENT](./HONEST-ASSESSMENT.md) at some point in browsing this repo. 
+
 ---
 
 ## The Problem
