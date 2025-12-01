@@ -47,7 +47,7 @@ I'll be honest about what's in this repo:
 
 That's a lot of infrastructure around "talk before you code." My personal style is to over document everything and this works for me. YMMV. 
 
-**The tradeoff**: Structure enables consistency but adds friction. If you adopt all of this, you're committing to a process. That process has value to me, but it's not free. This method reduced my cognitive load during project hoping, but it does take a commitment. 
+**The tradeoff**: Structure enables consistency but adds friction. If you adopt all of this, you're committing to a process. That process has value to me, but it's not free. This method reduced my cognitive load during project hopping, but it does take a commitment. 
 
 **My recommendation**: Start with just the conversation habit and one template. Add the tracking infrastructure (features.json, validation, etc.) only when you feel the need for it. Don't adopt the whole system on day one.
 
