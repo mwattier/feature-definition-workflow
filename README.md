@@ -1,268 +1,430 @@
-# Feature Definition Workflow
+# Feature Definition Workflow (v2)
 
-A conversational methodology for defining software features clearly before implementation, integrated with systematic project breakdown and issue tracking.
+A structured methodology for defining, verifying, and implementing software features with AI assistance. Designed to prevent costly rework by enforcing verification at every step.
 
-**Core Principle**: 15 minutes of conversation prevents hours of rework.
-
-## My Honest Assessment
-
-I suggest reading [HONEST-ASSESSMENT](./HONEST-ASSESSMENT.md) at some point in browsing this repo. 
+**Core Principle**: 15 minutes of conversation and verification prevents hours of rework and hundreds of dollars in wasted AI compute.
 
 ---
 
-## The Problem
+## What's New in v2
 
-When building features with AI assistance (or any development approach), common issues arise:
+Version 2 adds a **verification layer** that enforces cross-referencing during implementation:
 
-- **"Wait, that's not what I meant"** - Rework after implementation
-- **Context drift** - Understanding lost between sessions
-- **Unclear requirements** - Building the wrong thing
-- **Model confusion** - Data relationships unclear
-- **Implementation mismatch** - Code doesn't match intent
-- **Lost decisions** - Why did we choose this approach?
+| v1 (Planning) | v2 (Planning + Verification) |
+|---------------|------------------------------|
+| Feature definition | Feature definition |
+| Project breakdown | Project breakdown |
+| Issue tracking | Issue tracking |
+| — | **Per-file verification** |
+| — | **Dependency ordering** |
+| — | **Type/naming enforcement** |
+| — | **Session checkpoints** |
+| — | **Decision logging** |
+
+---
+
+## The Problem This Solves
+
+When building complex systems with AI assistance:
+
+- **Type mismatches**: `product_id: UUID` in schema, `product_id: string` in generated code
+- **Field name drift**: `productId` vs `product_id` vs `ProductID`
+- **Lost context**: Starting fresh each session, re-explaining architecture
+- **Silent errors**: AI generates code from "understanding" rather than cross-referencing sources
+- **Expensive rework**: $400+ spent on bugs that were entirely preventable
+
+These aren't AI capability failures — they're **verification failures**. The AI has the information but doesn't cross-reference it during generation.
 
 ---
 
 ## The Solution
 
-A structured approach combining:
+A two-layer system:
 
-1. **Conversational Feature Definition** - Clarify through dialogue before coding
-2. **Feature Documentation** - Create structured specifications
-3. **Project Breakdown** - Decompose large projects into manageable features
-4. **Issue Integration** - Handoff to tracking systems (features.json, GitHub, Jira, etc.)
+### Layer 1: Methodology (this repo)
+- Skills and templates that generate proper structure
+- Lives outside any specific project
+- Teaches Claude *how* to work
 
----
-
-## How It Works
-
-### Phase 1: Feature Definition (15-45 minutes)
-
-```
-User explains concept
-    ↓
-AI asks clarifying questions
-    ↓
-Synthesize into feature document
-    ↓
-Review and refine
-    ↓
-Approve specification
-```
-
-### Phase 2: Project Breakdown
-
-```
-Large project requirements
-    ↓
-Break into discrete features
-    ↓
-Define dependencies
-    ↓
-Prioritize implementation order
-```
-
-### Phase 3: Implementation Tracking
-
-```
-Feature document
-    ↓
-Create tracking entry (JSON/Issue)
-    ↓
-Implement with clear specification
-    ↓
-Update progress systematically
-```
-
----
-
-## What's Included
-
-### Documentation
-
-- **[01-METHODOLOGY.md](./01-METHODOLOGY.md)** - Complete feature definition process
-- **[02-TEMPLATES.md](./02-TEMPLATES.md)** - Feature document templates and guidance
-- **[03-PROJECT-BREAKDOWN.md](./03-PROJECT-BREAKDOWN.md)** - Breaking large projects into features
-- **[04-ISSUE-INTEGRATION.md](./04-ISSUE-INTEGRATION.md)** - Connecting to tracking systems
-
-### Templates
-
-- **Standard Template** - Comprehensive feature documentation
-- **Quick Template** - Lightweight for rapid iteration
-- **features.json Schema** - JSON-based tracking format
-- **Example features.json** - Sample implementation
-
-### Claude Skills
-
-- **feature-definer** - Guided conversational definition
-- **project-breaker** - Large project decomposition
-
-### Examples
-
-- Generic feature examples demonstrating the methodology
-- Sample features.json with multiple features
-
-### Scripts
-
-- **validate-features.py** - Validate features.json structure and content
-- Comprehensive checking of required fields, data types, dependencies
-- Integration examples for CI/CD, pre-commit hooks
-
-### Extras
-
-- **Context management patterns** - Session file templates and scripts
-- **refresh-context.sh** - Generate context summaries from session files
-- Session file examples (SESSION-CURRENT, ACTIVE-PROJECTS, etc.)
-- Insight into the larger workspace methodology
+### Layer 2: Project Enforcement (generated per-project)
+- CLAUDE.md with project-specific rules
+- Slash commands that enforce verification
+- Lives inside each project
+- Makes Claude *follow* the methodology
 
 ---
 
 ## Quick Start
 
-### 1. Read the Methodology
+### For New Projects
 
-Start with [01-METHODOLOGY.md](./01-METHODOLOGY.md) to understand the process.
+1. **Initialize project structure**:
+   ```
+   Use the project-initializer skill:
+   "Initialize this project for feature workflow"
+   ```
 
-### 2. Choose Your Template
+2. **Define your first feature**:
+   ```
+   Use the feature-definer skill:
+   "Let's define the product normalization feature"
+   ```
 
-See [02-TEMPLATES.md](./02-TEMPLATES.md) for template selection guidance.
+3. **Before implementing, run**:
+   ```
+   /pre-implement product-normalization
+   ```
 
-### 3. Define Your First Feature
+4. **Implement with verification**:
+   ```
+   /verify-file schema/product.py
+   [implement]
+   /verify-file services/writer.py
+   [implement]
+   ...
+   ```
 
-Use the conversational approach or install the Claude skill for guided assistance.
+5. **Complete with full verification**:
+   ```
+   /verify-feature product-normalization
+   ```
 
-### 4. Set Up Tracking
+### For Existing Projects
 
-See [04-ISSUE-INTEGRATION.md](./04-ISSUE-INTEGRATION.md) for integration with your tracking system.
-
----
-
-## Key Benefits
-
-### Before Implementation
-
-- ✅ **Clear understanding** - Shared clarity between human and AI
-- ✅ **Better decisions** - Questions reveal superior approaches
-- ✅ **Documented rationale** - Why choices were made
-- ✅ **Edge cases covered** - Thought through upfront
-
-### During Implementation
-
-- ✅ **No rework** - Building the right thing the first time
-- ✅ **Context preserved** - Documentation survives sessions
-- ✅ **Systematic progress** - Track completion objectively
-- ✅ **Prevented drift** - Clear specification to reference
-
-### Long Term
-
-- ✅ **Future clarity** - Understand decisions months later
-- ✅ **Team alignment** - Clear specs for collaboration
-- ✅ **Onboarding ease** - New people understand quickly
-- ✅ **Technical debt prevention** - Intentional architecture
+See [Adding to Existing Projects](#adding-to-existing-projects) below.
 
 ---
 
-## Real-World Success Pattern
+## Repository Structure
 
-### Without This Process
+```
+feature-definition-workflow/
+├── 01-METHODOLOGY.md           # Feature definition process
+├── 02-TEMPLATES.md             # Template selection guide
+├── 03-PROJECT-BREAKDOWN.md     # Breaking projects into features
+├── 04-ISSUE-INTEGRATION.md     # Connecting to tracking systems
+├── 05-VERIFICATION-WORKFLOW.md # NEW: Verification process
+├── templates/
+│   ├── feature-template.md     # Feature document template
+│   ├── architecture-context.md # NEW: ARCHITECTURE.md template
+│   ├── decision-log.md         # NEW: Decision log template
+│   ├── verification-checklist.md # NEW: Verification template
+│   └── features-schema-v2.md   # NEW: Updated JSON schema
+├── skills/
+│   ├── feature-definer/        # Guided feature definition
+│   └── project-initializer/    # NEW: Project scaffolding
+├── project-scaffold/           # NEW: Files copied to projects
+│   └── .claude/
+│       ├── CLAUDE.md           # Project instructions template
+│       └── commands/
+│           ├── pre-implement.md
+│           ├── verify-file.md
+│           ├── verify-feature.md
+│           ├── verification-status.md
+│           ├── checkpoint.md
+│           └── continue.md
+├── examples/
+├── scripts/
+└── extra/
+```
 
+---
+
+## How It Works
+
+### Phase 1: Project Setup
+
+```
+Initialize project
+    ↓
+Create ARCHITECTURE.md (system structure)
+    ↓
+Create features.json (v2 schema)
+    ↓
+Install .claude/ commands
+    ↓
+Ready for feature definition
+```
+
+### Phase 2: Feature Definition (unchanged from v1)
+
+```
+Conversation about feature
+    ↓
+Clarifying questions
+    ↓
+Feature document created
+    ↓
+Added to features.json
+```
+
+### Phase 3: Pre-Implementation (NEW)
+
+```
+/pre-implement [feature-id]
+    ↓
+Read ARCHITECTURE.md
+    ↓
+Identify all files + dependencies
+    ↓
+Create verification checklist
+    ↓
+Establish implementation order
+    ↓
+Human confirms
+```
+
+### Phase 4: Verified Implementation (NEW)
+
+```
+For each file (in dependency order):
+    ↓
+/verify-file [path]
+    ↓
+Read all dependency files
+    ↓
+Create field mapping table
+    ↓
+Check naming conventions
+    ↓
+Check type conventions
+    ↓
+If mismatch → STOP, ask human
+    ↓
+If verified → implement
+    ↓
+Re-verify after implementation
+```
+
+### Phase 5: Feature Completion (NEW)
+
+```
+/verify-feature [feature-id]
+    ↓
+Check all files verified
+    ↓
+Verify cross-file interfaces
+    ↓
+Run automated checks
+    ↓
+Update features.json
+    ↓
+Feature complete
+```
+
+---
+
+## Key Commands
+
+| Command | Purpose |
+|---------|---------|
+| `/pre-implement [id]` | Set up verification before implementing |
+| `/verify-file [path]` | Verify single file against dependencies |
+| `/verify-feature [id]` | Full feature verification |
+| `/verification-status` | Show current verification state |
+| `/checkpoint [desc]` | Save session progress |
+| `/continue [file]` | Resume from checkpoint |
+
+---
+
+## Verification Rules
+
+### Claude Must:
+
+1. **Copy, don't recall** — Field names and types are copy-pasted from source files
+2. **Show the source** — Every field reference includes file and line number
+3. **Verify dependencies first** — Can't implement file B until file A is verified
+4. **Stop on mismatch** — Never auto-resolve type or naming conflicts
+5. **Update checklists immediately** — Don't defer verification updates
+
+### Claude Must Not:
+
+1. Skip verification steps
+2. Generate field names from memory
+3. Auto-resolve mismatches
+4. Implement out of dependency order
+5. Mark files verified without cross-referencing
+
+---
+
+## features.json v2 Schema
+
+```json
+{
+  "version": "2.0",
+  "project": { ... },
+  "features": [
+    {
+      "id": "feature-id",
+      "title": "Feature Title",
+      "status": "in-progress",
+      "verification": {
+        "file": "verification/feature-id.md",
+        "status": "IN_PROGRESS",
+        "files_verified": 2,
+        "files_total": 5
+      },
+      "files": [
+        {
+          "path": "schema/product.py",
+          "depends_on": [],
+          "verification_status": "VERIFIED"
+        }
+      ],
+      "decisions": ["decisions/2025-12-22-uuid.md"],
+      "checkpoints": [...],
+      "current_checkpoint": "checkpoints/..."
+    }
+  ]
+}
+```
+
+See `templates/features-schema-v2.md` for full schema.
+
+---
+
+## Adding to Existing Projects
+
+If you have an existing project:
+
+1. **Copy the project scaffold**:
+   ```
+   cp -r project-scaffold/.claude your-project/
+   ```
+
+2. **Create ARCHITECTURE.md** using the template
+
+3. **Create or migrate features.json** to v2 schema
+
+4. **Create directories**:
+   ```
+   mkdir -p verification checkpoints decisions
+   ```
+
+5. **For in-progress features**, create verification checklists retroactively
+
+---
+
+## When Verification Catches Errors
+
+When Claude finds a mismatch:
+
+```
+VERIFICATION FAILED: Type mismatch detected
+
+Field: product_id
+Expected (from schema/product.py:12): UUID
+Found (in services/writer.py:45): str
+
+Options:
+A) Update schema to use str
+B) Update writer to use UUID
+C) Add explicit conversion
+
+Action required: Human decision
+```
+
+Claude **stops and waits**. No auto-resolution. The human decides, and the decision is logged.
+
+---
+
+## Checkpoints
+
+Checkpoints preserve context across sessions:
+
+```
+/checkpoint "Completed writer service, starting reader"
+```
+
+Creates `checkpoints/feature-id-20251222-1430.md` with:
+- What's complete
+- What's in progress
+- Key decisions made
+- Issues encountered
+- Next steps
+
+Resume with:
+```
+/continue
+```
+
+---
+
+## Decision Logs
+
+Major decisions are captured in `decisions/`:
+
+```markdown
+# Decision: UUIDs for All Identifiers
+
+> Date: 2025-12-22
+> Status: ACCEPTED
+
+## Context
+[Why this decision was needed]
+
+## Decision
+[What was decided]
+
+## Alternatives Considered
+[What else was considered and why not]
+
+## Consequences
+[Tradeoffs accepted]
+```
+
+Referenced in features.json and code comments.
+
+---
+
+## ROI
+
+### Before This Workflow
 ```
 Build feature based on rough idea
     ↓
-Implement interpretation of requirements
+Implement from AI's "understanding"
     ↓
-User: "That's not what I wanted"
+Type mismatch in production
     ↓
-Refactor/rebuild (2-3+ hours lost)
+Debug → Find error → Fix → Retest
+    ↓
+$400+ in AI compute wasted
 ```
 
-### With This Process
-
+### After This Workflow
 ```
-20-minute conversation with clarifying questions
+Define feature clearly
     ↓
-Discover simpler/better architecture
+Set up verification
     ↓
-Implement correct solution first time
+Implement with cross-referencing
+    ↓
+Catch mismatch before code is written
     ↓
 Zero rework needed
 ```
 
-**ROI**: Small time investment upfront prevents significant rework.
-
 ---
 
-## Methodology Principles
+## Documentation
 
-### 1. Conversation Over Documentation
-
-Don't write requirements alone - have a dialogue. Questions reveal better solutions.
-
-### 2. Explicit Over Implicit
-
-State assumptions clearly. "I think you mean X" prevents misunderstanding.
-
-### 3. Questions Improve Design
-
-Clarifying questions often reveal simpler, better approaches.
-
-### 4. Document Decisions
-
-Capture not just what was decided, but why.
-
-### 5. Structured Yet Flexible
-
-Templates provide structure, but adapt to your needs.
-
----
-
-## Integration Points
-
-This methodology works with:
-
-- **Any AI assistant** - Claude, ChatGPT, etc.
-- **Any tracking system** - features.json, GitHub Issues, Jira, Linear, etc.
-- **Any governance level** - Adapt formality to project needs
-- **Any agentic memory system** - OpenMemory, mem0, or others
-- **Any project type** - Web, mobile, data pipelines, infrastructure, etc.
-
----
-
-## Credits & Inspiration
-
-This methodology builds on research and best practices from:
-
-- Anthropic's work on effective long-running agent workflows
-- Real-world experience with AI-assisted development
-- Proven patterns for requirements clarification
-
-See [CITATIONS.md](./CITATIONS.md) for detailed references.
-
----
-
-## Getting Started
-
-1. **Understand the Process** → [01-METHODOLOGY.md](./01-METHODOLOGY.md)
-2. **Learn the Templates** → [02-TEMPLATES.md](./02-TEMPLATES.md)
-3. **Try an Example** → [examples/](./examples/)
-4. **Set Up Tracking** → [04-ISSUE-INTEGRATION.md](./04-ISSUE-INTEGRATION.md)
-
----
-
-## Contributing
-
-This methodology is shared openly to help developers avoid rework and build better software with AI assistance.
-
-Improvements, examples, and adaptations are welcome.
+| Document | Purpose |
+|----------|---------|
+| [01-METHODOLOGY.md](01-METHODOLOGY.md) | Feature definition process |
+| [02-TEMPLATES.md](02-TEMPLATES.md) | Template selection |
+| [03-PROJECT-BREAKDOWN.md](03-PROJECT-BREAKDOWN.md) | Breaking down projects |
+| [04-ISSUE-INTEGRATION.md](04-ISSUE-INTEGRATION.md) | Tracking integration |
+| [05-VERIFICATION-WORKFLOW.md](05-VERIFICATION-WORKFLOW.md) | Verification process |
+| [templates/](templates/) | All templates |
+| [skills/](skills/) | Claude skills |
 
 ---
 
 ## License
 
-MIT License - Copyright Mike Wattier https://selltinfoil.com
-
-See LICENSE file for details.
+MIT License — Copyright Mike Wattier
 
 ---
 
-**Remember**: The goal isn't perfect documentation - it's shared understanding that leads to correct implementation.
+**Remember**: The goal isn't perfect documentation — it's preventing the $400 mistakes through structured verification.
