@@ -1,3 +1,10 @@
+---
+name: project-initializer
+description: Initialize project with verification workflow structure. Use when user says "initialize project", "setup verification workflow", "scaffold project", or is starting a new project that will use feature-definition-workflow.
+metadata:
+  version: "1.0.0"
+---
+
 # Project Initializer Skill
 
 This skill sets up a new project with the complete verification workflow structure. Run this when starting a new project or adding the verification workflow to an existing project.

@@ -171,6 +171,7 @@ Systematic Progress
 **Related Projects & Tools**
 - [Compound Engineering Plugin](https://github.com/EveryInc/compound-engineering-plugin) - Workflow automation and engineering patterns
 - [Superpowers](https://github.com/obra/superpowers) - AI-powered development tooling and capabilities
+- [Agent Skills](https://agentskills.io) - A simple, open format for giving agents new capabilities and expertise.
 
 ---
 

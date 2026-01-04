@@ -1,10 +1,10 @@
 ---
 name: project-breaker
-version: 2.0.0
 description: |
   Decompose large projects into manageable features using three-tier breakdown (phases → epics → features → subtasks) with v2 verification workflow. Use when starting multi-month projects, breaking down large specifications, or creating features.json from architecture docs.
+metadata:
+  version: "2.0.0"
 ---
-
 # Project Breaker Skill (v2)
 
 ## When to Use This Skill
@@ -378,91 +378,12 @@ Complete features.json with definitions
 
 ---
 
-## Example Conversation (v2)
 
-**User**: "I have an existing Python scraping project with 7 scripts. I need to refactor it and add new features. How do I break this down?"
+## Example Conversation
 
-**You**: "I'll help you decompose this project into manageable features. First, let me check your project structure.
-
-[Checks for v2 structure]
-
-✓ I see you have v2 verification workflow set up with ARCHITECTURE.md.
-✓ features.json shows version 2.0
-
-Let me review your ARCHITECTURE.md and existing code...
-
-[Reviews ARCHITECTURE.md and codebase]
-
-Based on your existing system, I've identified a two-phase approach:
-
-**Phase 1: Infrastructure & Refactoring** (3-4 weeks)
-- Epic 1.1: Configuration Management
-- Epic 1.2: Code Standardization
-- Epic 1.3: Testing Framework
-
-**Phase 2: New Features** (3-4 weeks)
-- Epic 2.1: Database Backend
-- Epic 2.2: Scheduling & Automation
-- Epic 2.3: Reporting Dashboard
-
-Does this structure align with your goals?"
-
-**User**: "Yes, let's focus on Phase 1 first"
-
-**You**: "Great. Let me break Phase 1 into features...
-
-**Epic 1.1: Configuration Management**
-
-**F001: Environment Variable Configuration** (Critical)
-- **Files to modify**: 7 scraper scripts, README.md, ARCHITECTURE.md
-- **Files to create**: config.py, .env.example, .gitignore updates
-- **Total**: 13 files
-- **Effort**: Medium (6-8h)
-- **Dependencies**: None - can start immediately
-- **Blocks**: F002, F003, F005 (4 features depend on this)
-
-This feature has significant ripple effects - it touches all 7 scrapers and unblocks 4 other features. The verification checklist will ensure we maintain consistency across all files.
-
-Shall I continue with the other features?"
-
-**User**: "Yes, continue"
-
-[Continues breakdown...]
-
-**You**: "I've completed the breakdown. Here's the summary:
-
-**Project Breakdown Complete**
-- 12 features across 2 phases
-- 25 files to create/modify
-- 4 features on critical path
-- Estimated: 6-8 weeks
-
-**Critical Path**:
-F001 → F002 → F003 → F006 → F009 → F012
-
-**File Dependency Analysis**:
-- config.py: Required by 4 features (highest dependency)
-- base_scraper.py: Required by 3 features
-- 7 scraper files: Modified by multiple features (conflict potential)
-
-I've generated features.json with v2 verification structure. All features have:
-- Files to create/modify identified
-- Dependencies mapped
-- Verification structure initialized
-
-**Next Steps**:
-1. Review features.json structure
-2. Run `/pre-implement F001` to create verification checklist
-3. Use `feature-definer` for detailed F001 specification
-4. Start implementation with verification workflow
-
-Would you like me to:
-A) Show the file dependency matrix?
-B) Generate feature documents for first epic?
-C) Explain verification approach for F001?"
+For a detailed example of using this skill to decompose an existing project, see [references/EXAMPLE.md](references/EXAMPLE.md).
 
 ---
-
 ## Validation Checklist (v2 Enhanced)
 
 Before finalizing breakdown:
@@ -505,55 +426,10 @@ Before finalizing breakdown:
 
 ---
 
-## Anti-Patterns to Avoid
 
-❌ **Features Too Large**
-- Don't create "Build entire authentication system" (large, vague)
-- Do create 6-8 specific features for auth
-
-❌ **Flat Structure for Large Projects**
-- Don't put 150 features in a flat array
-- Do use phases → epics → features hierarchy
-
-❌ **Missing Dependencies**
-- Don't assume features can be done in any order
-- Do explicitly list what blocks what
-
-❌ **No Acceptance Criteria**
-- Don't leave features without clear "done" definition
-- Do list 3-6 specific, testable criteria
-
-❌ **v2 NEW: No File Identification**
-- Don't skip listing files to create/modify
-- Do identify all files affected by each feature
-
-❌ **v2 NEW: Ignoring ARCHITECTURE.md**
-- Don't break down features without checking system structure
-- Do map features to components from ARCHITECTURE.md
-
-❌ **v2 NEW: Skipping Verification Setup**
-- Don't let users start implementing without /pre-implement
-- Do enforce verification workflow from the start
+For detailed anti-patterns, success criteria, and version history, see [references/REFERENCE.md](references/REFERENCE.md).
 
 ---
-
-## Success Criteria (v2 Enhanced)
-
-The breakdown is successful when:
-
-1. ✅ Developer can start implementing first feature immediately
-2. ✅ Each feature has clear specification and acceptance criteria
-3. ✅ Dependencies create a valid implementation order
-4. ✅ Features are right-sized for context windows
-5. ✅ Progress is trackable and measurable
-6. ✅ Team/stakeholders understand the plan
-7. ✅ **v2 NEW**: Each feature lists files to create/modify
-8. ✅ **v2 NEW**: File dependencies are mapped and understood
-9. ✅ **v2 NEW**: ARCHITECTURE.md accurately reflects system
-10. ✅ **v2 NEW**: Verification workflow is ready to use
-
----
-
 ## Next Steps After Breakdown
 
 **v2 Workflow**:
@@ -602,21 +478,12 @@ The breakdown is successful when:
 - **[06-IMPLEMENTATION-CHECKLIST.md](../../06-IMPLEMENTATION-CHECKLIST.md)**: Quick-reference implementation checklist
 - **[05-VERIFICATION-WORKFLOW.md](../../05-VERIFICATION-WORKFLOW.md)**: Verification process details
 
----
-
-## Version History
-
-**v2.0.0** (2025-12-22):
-- Added v2 verification workflow integration
-- Added file identification and dependency mapping
-- Added ARCHITECTURE.md integration
-- Enhanced with verification complexity analysis
-- Added file dependency matrix generation
-- Updated output format for v2 schema
-- Added v2-specific validation checks
-
-**v1.0.0**: Original three-tier breakdown (phases → epics → features)
 
 ---
 
-**Remember**: The goal is manageable, context-window-sized features with clear specifications and verification structure. Large projects become tractable through systematic decomposition with v2's file-level dependency tracking.
+## Additional Resources
+
+- **[references/EXAMPLE.md](references/EXAMPLE.md)**: Complete example conversation showing v2 workflow
+- **[references/REFERENCE.md](references/REFERENCE.md)**: Detailed output format, anti-patterns, success criteria
+
+---

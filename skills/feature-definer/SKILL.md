@@ -1,8 +1,9 @@
 ---
 name: feature-definer
-version: 2.0.0
 description: |
   Guide users through conversational feature definition with v2 verification workflow. Use when user says "define a feature", "help me plan", "new feature", or mentions unclear requirements. Prevents rework by ensuring clear understanding before implementation.
+metadata:
+  version: "2.0.0"
 ---
 
 # Feature Definer Skill (v2)
