@@ -168,6 +168,10 @@ Systematic Progress
 - For exploring and sharing implementation patterns
 - For feedback on conversational development approaches
 
+**Related Projects & Tools**
+- [Compound Engineering Plugin](https://github.com/EveryInc/compound-engineering-plugin) - Workflow automation and engineering patterns
+- [Superpowers](https://github.com/obra/superpowers) - AI-powered development tooling and capabilities
+
 ---
 
 ## License
