@@ -161,12 +161,19 @@ Next steps:
 1. Review ARCHITECTURE.md and fill in any missing details
 2. Define your first feature using /feature-define
 3. Before implementing, run /pre-implement [feature-id]
+4. Review 06-IMPLEMENTATION.md for systematic implementation workflow
+5. Print 06-IMPLEMENTATION-CHECKLIST.md for use during development
 
 The verification workflow is now active. Claude will:
 - Require verification before implementing files
 - Cross-reference all field names and types
 - Stop on mismatches and ask for decisions
 - Create checkpoints to preserve context
+- Follow systematic implementation workflow from 06-IMPLEMENTATION.md
+
+Implementation resources available:
+- 06-IMPLEMENTATION.md: Complete workflow guide
+- 06-IMPLEMENTATION-CHECKLIST.md: Quick reference checklist
 
 Would you like to define your first feature now?
 ```

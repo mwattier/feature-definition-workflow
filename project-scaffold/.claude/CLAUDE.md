@@ -24,6 +24,40 @@ Before implementing any feature, Claude must read:
 3. Do not write code until verification checklist exists
 ```
 
+### Implementation Workflow
+
+Follow systematic implementation from [06-IMPLEMENTATION.md](../../06-IMPLEMENTATION.md):
+
+**Pre-Implementation Setup**:
+1. Verify clear spec exists
+2. Create feature branch: `feature/F001-description`
+3. Research codebase patterns (if applicable)
+4. Create worktree (recommended): `git worktree add ../worktrees/F001 feature/F001-description`
+5. Update features.json status to `in_progress`
+
+**For Each Subtask**:
+1. Read subtask
+2. Run `/verify-file` before writing
+3. Implement
+4. Run `/verify-file` after writing
+5. Test (non-negotiable)
+6. Commit with clear message
+7. Update progress in features.json
+
+**Regular Checks** (every 30-60 minutes):
+- Re-read relevant spec section
+- Verify implementation matches intent
+- Document any deviations
+- Update progress
+
+**Before Marking Complete**:
+- Run pre-completion checklist (see 06-IMPLEMENTATION.md)
+- Verify all acceptance criteria met
+- Run `/verify-feature [feature-id]`
+- Document implementation deltas
+
+**Quick Reference**: Print [06-IMPLEMENTATION-CHECKLIST.md](../../06-IMPLEMENTATION-CHECKLIST.md) and keep visible during development.
+
 ### Before Modifying Any File
 
 ```
@@ -143,6 +177,11 @@ Checkpoint command: `/checkpoint [brief description]`
 | `/verification-status` | Show current verification state |
 | `/checkpoint [description]` | Save current progress |
 | `/continue [checkpoint-file]` | Resume from checkpoint |
+
+## Implementation Reference
+
+- **[06-IMPLEMENTATION.md](../../06-IMPLEMENTATION.md)**: Complete systematic implementation workflow
+- **[06-IMPLEMENTATION-CHECKLIST.md](../../06-IMPLEMENTATION-CHECKLIST.md)**: Printable quick reference checklist
 
 ## Directory Structure
 

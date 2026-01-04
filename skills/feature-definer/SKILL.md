@@ -168,6 +168,19 @@ This will:
 - Establish implementation order
 
 ⚠️ Do NOT start implementation until /pre-implement is complete.
+
+After verification setup:
+→ Review 06-IMPLEMENTATION.md for systematic implementation workflow
+→ Use 06-IMPLEMENTATION-CHECKLIST.md during implementation
+
+Implementation workflow:
+1. Pre-implementation setup (branch, worktree, codebase research)
+2. Execute subtasks systematically (verify → implement → test → commit)
+3. Regular checks (spec alignment, progress updates)
+4. Pre-completion checklist (functionality, quality, security)
+5. Post-implementation (PR creation, worktree cleanup)
+
+See 06-IMPLEMENTATION.md for complete details.
 ```
 
 **For v1 projects**:
@@ -285,10 +298,23 @@ Does this accurately capture what we discussed?"
 ✅ Feature defined: user-authentication
 📄 Document: features/user-authentication.md
 
-**Next step**: Run verification setup
-→ /pre-implement user-authentication
+**Next steps**:
+1. **Verification Setup**: Run `/pre-implement user-authentication`
+   This creates the verification checklist and dependency map.
 
-This will create the verification checklist and dependency map. Do NOT start implementing until this is complete."
+2. **Implementation**: Follow 06-IMPLEMENTATION.md workflow:
+   - Create feature branch and worktree
+   - Execute subtasks systematically with verification
+   - Use 06-IMPLEMENTATION-CHECKLIST.md as quick reference
+   - Test after every change
+   - Check spec alignment regularly
+
+3. **Completion**: Run `/verify-feature user-authentication`
+   Ensures all files verified and acceptance criteria met.
+
+Do NOT start implementing until /pre-implement is complete.
+
+Would you like me to run /pre-implement now?"
 
 ---
 
@@ -380,6 +406,12 @@ The process is successful when:
 - **project-initializer**: For adding v2 verification workflow to projects
 - **project-breaker**: For decomposing large projects into features
 - **Your governance system**: For determining appropriate template level
+
+## Related Documentation
+
+- **[06-IMPLEMENTATION.md](../../06-IMPLEMENTATION.md)**: Systematic implementation workflow
+- **[06-IMPLEMENTATION-CHECKLIST.md](../../06-IMPLEMENTATION-CHECKLIST.md)**: Quick-reference checklist for implementation
+- **[05-VERIFICATION-WORKFLOW.md](../../05-VERIFICATION-WORKFLOW.md)**: Verification process details
 
 ---
 

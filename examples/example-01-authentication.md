@@ -539,3 +539,244 @@ const authenticate = async (req, res, next) => {
 - **Total**: ~35 minutes
 
 **Value**: Clear specification prevents hours of rework from misunderstood requirements.
+
+---
+
+## Implementation
+
+This section demonstrates how the systematic workflow from [06-IMPLEMENTATION.md](../06-IMPLEMENTATION.md) was followed for this feature.
+
+### Pre-Implementation Setup
+
+**1. Verified Feature Specification** ✅
+- Feature document reviewed and approved
+- Acceptance criteria clear
+- All questions answered
+
+**2. Created Feature Branch**
+```bash
+git checkout -b feature/F001-user-authentication
+```
+
+**3. Researched Codebase**
+- Reviewed existing Express.js patterns in `/src/routes/`
+- Identified database schema conventions (UUID primary keys)
+- Found email service setup in `/src/services/email/`
+- Confirmed bcrypt already in dependencies
+
+**4. Created Worktree** (Recommended for isolation)
+```bash
+git worktree add ../worktrees/F001 feature/F001-user-authentication
+cd ../worktrees/F001
+```
+
+**5. Updated features.json**
+```json
+{
+  "id": "F001",
+  "status": "in_progress",
+  "startedDate": "2025-11-30T09:00:00Z"
+}
+```
+
+### Verification Setup
+
+Ran pre-implementation command:
+```bash
+/pre-implement F001
+```
+
+Created verification checklist at `verification/F001.md` with all 10 subtasks mapped to files:
+- Database migrations
+- Service implementations
+- Route handlers
+- Middleware
+- Tests
+
+### Systematic Implementation
+
+**Subtask F001.1: Database Schema** ✅
+
+*Before writing*:
+```bash
+/verify-file migrations/001_create_users_table.js
+```
+Verified: Column names use snake_case, UUID for id, timestamps match project conventions
+
+*Implementation*:
+Created migration with User and PasswordReset tables per spec
+
+*After writing*:
+```bash
+/verify-file migrations/001_create_users_table.js
+```
+Verified: All field names match feature doc, types correct
+
+*Testing*:
+```bash
+npm run migrate:test
+# All migrations applied successfully
+```
+
+*Commit*:
+```bash
+git add migrations/001_create_users_table.js
+git commit -m "feat(auth): add User and PasswordReset database schema
+
+- User table with bcrypt password_hash
+- PasswordReset table with token and expiry
+- Indexes on email (unique) and tokens
+- Foreign key constraints with cascade
+
+Implements: F001.1"
+```
+
+**Subtask F001.2: Password Hashing Service** ✅
+
+*Before writing*:
+```bash
+/verify-file src/services/password-service.js
+```
+
+*Implementation*:
+Created PasswordService with bcrypt integration (10 rounds)
+
+*After writing*:
+```bash
+/verify-file src/services/password-service.js
+```
+Verified: Method names match feature doc, bcrypt properly configured
+
+*Testing*:
+```bash
+npm test src/services/password-service.test.js
+# ✓ hashes password with bcrypt
+# ✓ verifies correct password
+# ✓ rejects incorrect password
+# ✓ validates password strength requirements
+# 4 passing
+```
+
+*Commit*:
+```bash
+git commit -m "feat(auth): implement password hashing service
+
+- bcrypt hashing with 10 rounds
+- Password strength validation
+- Timing-safe comparison
+
+Implements: F001.2"
+```
+
+**Subtasks F001.3 through F001.10** followed same pattern:
+1. `/verify-file` before writing
+2. Implement according to spec
+3. `/verify-file` after writing
+4. Run tests (non-negotiable)
+5. Commit with clear message
+6. Update features.json progress
+
+### Regular Checks (Every 30-60 Minutes)
+
+- Re-read relevant spec sections
+- Verified implementation matched intent
+- No deviations from spec
+- Updated progress in features.json
+
+### Pre-Completion Checklist
+
+**Functionality** ✅
+- All 10 acceptance criteria verified
+- Manual testing of complete flows
+- Edge cases handled
+
+**Code Quality** ✅
+- ESLint passing
+- No code smells
+- Test coverage: 87%
+
+**Security** ✅
+- Passwords never logged
+- SQL injection prevented (parameterized queries)
+- Rate limiting on auth endpoints
+- Timing-safe token comparison
+
+**Data Integrity** ✅
+- All migrations reversible
+- Foreign key constraints correct
+- Indexes on performance-critical columns
+
+### Feature Verification
+
+```bash
+/verify-feature F001
+```
+
+Result: All 10 subtasks VERIFIED, no blockers, ready for review
+
+### Final Steps
+
+**Updated features.json**:
+```json
+{
+  "id": "F001",
+  "status": "completed",
+  "progress": 100,
+  "completedDate": "2025-11-30T17:30:00Z"
+}
+```
+
+**Created Pull Request**:
+```bash
+gh pr create --title "Feature: User Authentication System (F001)" \
+  --body "$(cat <<EOF
+## Summary
+Complete implementation of email/password authentication with:
+- JWT-based sessions
+- Password reset via email
+- Brute-force protection
+- 87% test coverage
+
+## Testing
+- All unit tests passing
+- Integration tests passing
+- Manual testing complete
+
+## Security Review
+- Bcrypt password hashing
+- Rate limiting implemented
+- SQL injection prevention verified
+- No sensitive data in logs
+
+Closes #12
+EOF
+)"
+```
+
+**Cleaned Up Worktree** (After PR merged):
+```bash
+# Verified worktree is stale (branch merged and deleted)
+git worktree list
+# Removed worktree
+git worktree remove ../worktrees/F001
+```
+
+### Implementation Results
+
+**Total Time**: 22 hours over 3 days
+**Commits**: 15 (one per subtask + fixes)
+**Tests Written**: 43 tests across 5 test files
+**Test Coverage**: 87%
+**Blockers**: None
+**Deviations**: None
+
+**Key Success Factors**:
+1. Clear specification prevented scope creep
+2. Verification before/after writing caught type mismatches early
+3. Test-after-every-change prevented regression bugs
+4. Regular spec checks maintained alignment
+5. Worktree isolation prevented conflicts with other work
+
+**Resources Used**:
+- [06-IMPLEMENTATION.md](../06-IMPLEMENTATION.md) - Complete workflow guide
+- [06-IMPLEMENTATION-CHECKLIST.md](../06-IMPLEMENTATION-CHECKLIST.md) - Printed and kept visible throughout

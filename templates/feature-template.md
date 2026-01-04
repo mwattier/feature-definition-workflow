@@ -408,6 +408,33 @@ Free-form section for capturing insights during definition and implementation:
 
 ---
 
+## Next Steps
+
+Once this feature is approved:
+
+1. **Verification Setup**
+   ```bash
+   /pre-implement [feature-id]
+   ```
+   Creates verification checklist and maps dependencies.
+
+2. **Implementation**
+   - Review **[06-IMPLEMENTATION.md](../06-IMPLEMENTATION.md)** for systematic workflow
+   - Print **[06-IMPLEMENTATION-CHECKLIST.md](../06-IMPLEMENTATION-CHECKLIST.md)** for reference
+   - Create feature branch and worktree
+   - Execute subtasks with verification
+   - Test after every change
+
+3. **Completion**
+   ```bash
+   /verify-feature [feature-id]
+   ```
+   Verifies all acceptance criteria met.
+
+See: [06-IMPLEMENTATION.md](../06-IMPLEMENTATION.md)
+
+---
+
 **Template Version**: 1.0
 **Last Updated**: 2025-11-30
 **Source**: ~/workspace/docs/processes/templates/feature-template.md

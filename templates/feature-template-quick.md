@@ -82,6 +82,13 @@ Any additional insights or decisions:
 
 ---
 
+## Implementation
+
+See [06-IMPLEMENTATION.md](../06-IMPLEMENTATION.md) for systematic workflow.
+Use [06-IMPLEMENTATION-CHECKLIST.md](../06-IMPLEMENTATION-CHECKLIST.md) as quick reference.
+
+---
+
 **Template Version**: 1.0 (Quick Governance)
 **Last Updated**: 2025-11-30
 **Source**: ~/workspace/docs/processes/templates/feature-template-quick.md

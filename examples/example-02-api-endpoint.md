@@ -312,3 +312,208 @@ JSON structure:
 - **Total**: ~20 minutes
 
 **Result**: Clear, implementable specification that covers security, performance, and edge cases.
+
+---
+
+## Implementation
+
+This section demonstrates how the systematic workflow from [06-IMPLEMENTATION.md](../06-IMPLEMENTATION.md) was applied to this API feature.
+
+### Pre-Implementation Setup
+
+**1. Verified Feature Specification** ✅
+- Feature document approved
+- Dependency on F001 (authentication) confirmed as complete
+
+**2. Created Feature Branch**
+```bash
+git checkout -b feature/F004-data-export-api
+```
+
+**3. Researched Codebase**
+- Found existing queue system (Bull with Redis)
+- Identified S3 configuration for file storage
+- Confirmed EmailService from F001 (authentication)
+- Reviewed user data models for export structure
+
+**4. Created Worktree**
+```bash
+git worktree add ../worktrees/F004 feature/F004-data-export-api
+cd ../worktrees/F004
+```
+
+**5. Updated features.json**
+```json
+{
+  "id": "F004",
+  "status": "in_progress",
+  "startedDate": "2025-12-01T09:00:00Z"
+}
+```
+
+### Verification Setup
+
+```bash
+/pre-implement F004
+```
+
+Created verification checklist mapping 8 subtasks to implementation files
+
+### Systematic Implementation
+
+**Subtask F004.1: Database Schema** ✅
+
+*Implementation*:
+Created ExportJob table with enum types for format and status
+
+*Testing*:
+```bash
+npm run migrate:test
+# Migration applied successfully
+```
+
+*Commit*:
+```bash
+git commit -m "feat(export): add ExportJob database schema
+
+- ExportJob table with status tracking
+- Foreign key to users table
+- Indexes on user_id and status
+
+Implements: F004.1"
+```
+
+**Subtask F004.2 & F004.3: CSV and JSON Export** ✅
+
+*Before writing*: `/verify-file src/services/export-service.js`
+
+*Implementation*:
+- CSV generator with proper escaping
+- JSON generator excluding sensitive fields
+- Shared data collection logic
+
+*Testing*:
+```bash
+npm test src/services/export-service.test.js
+# ✓ CSV exports user data correctly
+# ✓ JSON exports user data correctly
+# ✓ excludes password_hash field
+# ✓ excludes internal system fields
+# ✓ formats timestamps correctly
+# 5 passing
+```
+
+*Commit*:
+```bash
+git commit -m "feat(export): implement CSV and JSON export formats
+
+- CSV with proper field escaping
+- JSON with nested structure
+- Exclude sensitive fields (password_hash, internal_id)
+- Shared data collection logic
+
+Implements: F004.2, F004.3"
+```
+
+**Subtask F004.4: Background Worker** ✅
+
+*Implementation*:
+Queue-based worker using Bull, threshold at 1000 records
+
+*Testing*:
+```bash
+npm test src/workers/export-worker.test.js
+# ✓ processes small exports synchronously
+# ✓ queues large exports
+# ✓ handles job failures gracefully
+# 3 passing
+```
+
+**Subtasks F004.5-F004.8** followed same pattern:
+- Verify → Implement → Test → Commit
+- Updated features.json after each completion
+
+### Pre-Completion Checklist
+
+**Functionality** ✅
+- Small exports work immediately
+- Large exports queued and processed
+- Both CSV and JSON formats correct
+- Email notifications sent
+- Audit logging complete
+
+**Code Quality** ✅
+- ESLint passing
+- Test coverage: 82%
+- No code duplication
+
+**Security** ✅
+- Authentication required (JWT middleware)
+- Users can only export own data
+- Sensitive fields excluded
+- Download URLs time-limited (7 days)
+
+**Data Integrity** ✅
+- Export jobs tracked correctly
+- File cleanup job scheduled for expired exports
+
+### Feature Verification
+
+```bash
+/verify-feature F004
+```
+
+Result: All 8 subtasks VERIFIED, ready for review
+
+### Final Steps
+
+**Created Pull Request**:
+```bash
+gh pr create --title "Feature: User Data Export API (F004)" \
+  --body "$(cat <<EOF
+## Summary
+User data export in CSV/JSON formats with:
+- Immediate download for small exports (<1000 records)
+- Queued processing for large exports
+- Email notifications
+- 7-day download link expiry
+- 82% test coverage
+
+## Testing
+- Unit tests: 15 passing
+- Integration tests: 8 passing
+- Manual testing complete
+
+## Security
+- JWT authentication required
+- User can only export own data
+- Sensitive fields excluded
+
+Closes #18
+EOF
+)"
+```
+
+**Cleaned Up Worktree** (After merge):
+```bash
+git worktree remove ../worktrees/F004
+```
+
+### Implementation Results
+
+**Total Time**: 12 hours over 2 days
+**Commits**: 8 (one per subtask)
+**Tests Written**: 23 tests across 4 test files
+**Test Coverage**: 82%
+**Blockers**: None
+**Deviations**: None
+
+**Key Success Factors**:
+1. Reused authentication middleware from F001 (good dependency management)
+2. Existing queue system saved implementation time
+3. Clear threshold (1000 records) made sync/async decision straightforward
+4. Verification caught field name mismatch early (user_id vs userId)
+
+**Resources Used**:
+- [06-IMPLEMENTATION.md](../06-IMPLEMENTATION.md) - Complete workflow
+- [06-IMPLEMENTATION-CHECKLIST.md](../06-IMPLEMENTATION-CHECKLIST.md) - Quick reference

@@ -561,10 +561,25 @@ The breakdown is successful when:
 2. **For first feature**:
    - Run `/pre-implement [feature-id]`
    - Use `feature-definer` for detailed spec
+   - Review 06-IMPLEMENTATION.md for workflow
+   - Print 06-IMPLEMENTATION-CHECKLIST.md for reference
    - Implement with `/verify-file` for each file
+   - Test systematically after each change
    - Complete with `/verify-feature`
 3. **Repeat for subsequent features**
 4. **Update progress** as features complete
+
+**Implementation Resources**:
+- **06-IMPLEMENTATION.md**: Complete implementation workflow
+  - Pre-implementation setup
+  - Systematic subtask execution
+  - Pre-completion checklist
+  - Post-implementation steps
+- **06-IMPLEMENTATION-CHECKLIST.md**: Printable quick reference
+  - Pre-implementation setup checklist
+  - For-each-subtask steps
+  - Pre-completion verification
+  - Troubleshooting quick reference
 
 **v1 Workflow** (backward compatible):
 1. **Review with stakeholders**
@@ -580,6 +595,12 @@ The breakdown is successful when:
 - **project-initializer**: For adding v2 verification workflow to projects
 - **feature-definer**: For creating detailed feature specifications
 - **Your project management tools**: For issue tracking integration
+
+## Related Documentation
+
+- **[06-IMPLEMENTATION.md](../../06-IMPLEMENTATION.md)**: Systematic implementation workflow
+- **[06-IMPLEMENTATION-CHECKLIST.md](../../06-IMPLEMENTATION-CHECKLIST.md)**: Quick-reference implementation checklist
+- **[05-VERIFICATION-WORKFLOW.md](../../05-VERIFICATION-WORKFLOW.md)**: Verification process details
 
 ---
 
