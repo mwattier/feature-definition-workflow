@@ -103,7 +103,9 @@ feature-definition-workflow/
 ├── 02-TEMPLATES.md             # Template selection guide
 ├── 03-PROJECT-BREAKDOWN.md     # Breaking projects into features
 ├── 04-ISSUE-INTEGRATION.md     # Connecting to tracking systems
-├── 05-VERIFICATION-WORKFLOW.md # NEW: Verification process
+├── 05-VERIFICATION-WORKFLOW.md # Verification process
+├── 06-IMPLEMENTATION.md        # NEW: Execution discipline & git workflows
+├── 06-IMPLEMENTATION-CHECKLIST.md # Quick-reference checklist companion
 ├── templates/
 │   ├── feature-template.md     # Feature document template
 │   ├── architecture-context.md # NEW: ARCHITECTURE.md template
@@ -194,6 +196,12 @@ If mismatch → STOP, ask human
 If verified → implement
     ↓
 Re-verify after implementation
+    ↓
+Run tests (see 06-IMPLEMENTATION.md)
+    ↓
+Commit with proper message
+    ↓
+Update features.json progress
 ```
 
 ### Phase 5: Feature Completion (NEW)
@@ -416,6 +424,8 @@ Zero rework needed
 | [03-PROJECT-BREAKDOWN.md](03-PROJECT-BREAKDOWN.md) | Breaking down projects |
 | [04-ISSUE-INTEGRATION.md](04-ISSUE-INTEGRATION.md) | Tracking integration |
 | [05-VERIFICATION-WORKFLOW.md](05-VERIFICATION-WORKFLOW.md) | Verification process |
+| [06-IMPLEMENTATION.md](06-IMPLEMENTATION.md) | Execution discipline & git workflows |
+| [06-IMPLEMENTATION-CHECKLIST.md](06-IMPLEMENTATION-CHECKLIST.md) | Quick-reference checklist (print & use) |
 | [templates/](templates/) | All templates |
 | [skills/](skills/) | Claude skills |
 

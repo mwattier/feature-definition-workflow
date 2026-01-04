@@ -51,7 +51,45 @@ git checkout -b feature/F001-user-authentication
 - Keep description short but meaningful
 - Use kebab-case
 
-### 3. Create Isolated Worktree (Recommended)
+### 3. Codebase Research (If Applicable)
+
+Before creating your worktree, understand what you're working with.
+
+**When to do this:**
+- ✅ Existing codebase with established patterns
+- ✅ Feature similar to something already built
+- ✅ Unfamiliar with this area of the code
+- ❌ Greenfield project
+- ❌ Truly novel feature with no precedent
+
+**What to look for:**
+
+Ask Claude (or yourself):
+1. "Are there existing features similar to this? How are they structured?"
+2. "What patterns does this codebase use for [auth/API/data access/etc.]?"
+3. "What naming conventions, file structures, or architectural patterns should I follow?"
+
+**Surface findings in the feature document:**
+
+```markdown
+## Codebase Research
+
+**Similar features found:**
+- PaymentController uses same service pattern we'll use here
+- Existing JWT implementation in app/Services/TokenService.php
+
+**Patterns to follow:**
+- Services handle business logic, controllers are thin
+- All API responses wrapped in ApiResponse::success() / ::error()
+
+**Relevant files to reference:**
+- app/Http/Controllers/PaymentController.php
+- app/Services/TokenService.php
+```
+
+**Why research before worktree:** You want to know what patterns to follow before you start writing code, not discover mid-implementation that you've done it differently than the rest of the codebase.
+
+### 4. Create Isolated Worktree (Recommended)
 
 Worktrees let you work on features in isolation without stashing or switching branches.
 
@@ -77,7 +115,13 @@ cd ../worktrees/F001
 - Hotfixes that need immediate deployment
 - When worktree overhead exceeds benefit
 
-### 4. Update features.json
+**When to clean up worktrees:**
+- ✅ After PR merged and deployed
+- ✅ After feature abandoned/cancelled
+- ❌ Not while PR is under review (might need quick fixes)
+- ❌ Not if feature might need hotfix shortly after merge
+
+### 5. Update features.json
 
 Mark the feature as started:
 
@@ -114,7 +158,15 @@ Don't implement the whole feature at once. Work through subtasks from your featu
 - After: Ensures what you wrote actually matches what you intended
 
 ```bash
-# Good commit message format
+# Commit message format
+# Optional: Use Conventional Commits (feat, fix, docs, refactor, test, chore)
+git commit -m "feat(F001.1): create users table migration
+
+- Add email, password_hash, created_at fields
+- Add unique index on email
+- Add timestamps"
+
+# Or simpler format if not using Conventional Commits:
 git commit -m "F001.1: Create users table migration
 
 - Add email, password_hash, created_at fields
@@ -175,6 +227,71 @@ Update progress as subtasks complete:
 ```
 
 **Progress calculation**: `(completed subtasks / total subtasks) × 100`
+
+**Tip:** Use a script to auto-calculate progress:
+```bash
+# Example: scripts/update-progress.sh
+jq '.features[] | select(.id=="F001") | 
+  .progress = ((.subtasks | map(select(.status=="completed")) | length) / 
+  (.subtasks | length) * 100 | floor)' features.json
+```
+
+### Estimating Time Remaining
+
+At 25%, 50%, 75% completion, ask yourself:
+- Am I on track with the original estimate?
+- Have I discovered unexpected complexity?
+- Should I update features.json `actualEffort`?
+
+**Red flags:**
+- Subtask taking >2x estimate
+- Multiple "just one more thing" additions
+- Drifting from spec without documentation
+
+**Action:** Stop, reassess, update estimate in features.json if needed. Estimates aren't commitments — they're tools for planning.
+
+### Continuous Integration
+
+If your project has CI/CD:
+
+**After each push:**
+- [ ] Check CI pipeline status
+- [ ] Review failed checks (linting, tests, security scans)
+- [ ] Fix issues before moving to next subtask
+
+**Don't:**
+- Push multiple times to "fix CI" without testing locally first
+- Ignore failing checks with intent to "fix later"
+- Wait until PR creation to discover CI issues
+
+**Tip:** Run the same checks locally that CI runs. If CI runs `npm test && npm run lint`, run that before pushing.
+
+### Merge Conflicts
+
+If your feature branch falls behind main:
+
+1. **Stay calm** — Conflicts are normal, especially on active codebases
+2. **Update main**: 
+   ```bash
+   git checkout main && git pull
+   ```
+3. **Rebase or merge:**
+   ```bash
+   # Option A: Rebase (cleaner history)
+   git checkout feature/F001-auth
+   git rebase main
+   
+   # Option B: Merge (preserves history)
+   git checkout feature/F001-auth
+   git merge main
+   ```
+4. **Resolve conflicts** — Use your IDE's merge tool
+5. **Test after resolving** — Conflicts can introduce bugs
+6. **Continue:** `git rebase --continue` or commit the merge
+
+**When to rebase vs merge:**
+- **Rebase:** Clean history, solo work, before PR review
+- **Merge:** Preserves context, during PR review, shared branches
 
 ---
 
@@ -329,65 +446,6 @@ git worktree remove ../worktrees/F001
 
 # Delete feature branch (optional, after merge)
 git branch -d feature/F001-user-authentication
-```
-
----
-
-## Codebase Research (Optional)
-
-When working in an existing codebase, research before implementing.
-
-### When to Do This
-
-- ✅ Existing codebase with established patterns
-- ✅ Feature similar to something already built
-- ✅ Unfamiliar with this area of the code
-- ❌ Greenfield project
-- ❌ Truly novel feature with no precedent
-
-### What to Look For
-
-**Before implementing, ask Claude (or yourself):**
-
-1. **Similar features**: "Are there existing features similar to this? How are they structured?"
-
-2. **Patterns in use**: "What patterns does this codebase use for [auth/API/data access/etc.]?"
-
-3. **Conventions**: "What naming conventions, file structures, or architectural patterns should I follow?"
-
-4. **Recent changes**: "What's been changed recently in related areas?"
-
-### How to Surface Findings
-
-During feature definition conversation:
-
-```
-AI: "I looked at your codebase and found:
-- You handle authentication in app/Services/AuthService.php using JWT
-- Your API controllers follow a ResourceController pattern
-- Tests are organized by feature in tests/Feature/
-
-Should this feature follow the same patterns?"
-```
-
-Or in the feature document:
-
-```markdown
-## Codebase Research
-
-**Similar features found:**
-- PaymentController uses same service pattern we'll use here
-- Existing JWT implementation in app/Services/TokenService.php
-
-**Patterns to follow:**
-- Services handle business logic, controllers are thin
-- All API responses wrapped in ApiResponse::success() / ::error()
-- Feature tests use RefreshDatabase trait
-
-**Relevant files to reference:**
-- app/Http/Controllers/PaymentController.php (similar structure)
-- app/Services/TokenService.php (JWT handling)
-- tests/Feature/PaymentTest.php (test patterns)
 ```
 
 ---
