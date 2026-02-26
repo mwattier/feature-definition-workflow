@@ -56,8 +56,15 @@ class FeatureValidator:
         self.info: List[str] = []
 
         # Detect version
-        if self.data.get('version') == '2.0':
+        raw_version = self.data.get('version')
+        if raw_version == '2.0':
             self.version = 2
+        elif raw_version == 2.0 or raw_version == 2:
+            self.version = 2
+            self.warnings.append(
+                f"'version' should be the string \"2.0\", not numeric {raw_version!r}. "
+                "Treating as v2 but please update to a string."
+            )
         else:
             self.version = 1
 
@@ -136,9 +143,9 @@ class FeatureValidator:
             if not isinstance(fid, str):
                 self.errors.append(f"{context}: 'id' must be a string")
             elif self.version == 2:
-                if not re.match(r'^[a-z0-9-]+$', fid):
+                if not re.match(r'^[a-z0-9]+(-[a-z0-9]+)*$', fid):
                     self.errors.append(
-                        f"{context}: ID must be kebab-case (lowercase alphanumeric and hyphens, got: {fid})"
+                        f"{context}: ID must be kebab-case (lowercase alphanumeric segments separated by single hyphens, got: {fid})"
                     )
             else:
                 if not fid.startswith('F'):
@@ -334,14 +341,46 @@ class FeatureValidator:
                 if not isinstance(entry['depends_on'], list):
                     self.errors.append(f"{file_context}: 'depends_on' must be an array")
                 else:
+                    all_paths = {e.get('path') for e in files if isinstance(e, dict) and 'path' in e}
                     for dep in entry['depends_on']:
                         if not isinstance(dep, str):
                             self.errors.append(f"{file_context}: 'depends_on' entries must be strings")
+                        elif dep not in all_paths:
+                            self.errors.append(
+                                f"{file_context}: depends_on references '{dep}' which is not in this feature's files list"
+                            )
 
             if 'verified_at' in entry:
                 val = entry['verified_at']
                 if not isinstance(val, str):
                     self.errors.append(f"{file_context}: 'verified_at' must be a string")
+
+        # Check for circular file-level dependencies
+        file_graph: Dict[str, List[str]] = {}
+        for entry in files:
+            if isinstance(entry, dict) and 'path' in entry:
+                file_graph[entry['path']] = [
+                    d for d in entry.get('depends_on', []) if isinstance(d, str)
+                ]
+
+        def _file_has_cycle(node: str, visited: Set[str], rec_stack: Set[str]) -> bool:
+            visited.add(node)
+            rec_stack.add(node)
+            for neighbor in file_graph.get(node, []):
+                if neighbor not in visited:
+                    if _file_has_cycle(neighbor, visited, rec_stack):
+                        return True
+                elif neighbor in rec_stack:
+                    return True
+            rec_stack.remove(node)
+            return False
+
+        visited: Set[str] = set()
+        for node in file_graph:
+            if node not in visited:
+                if _file_has_cycle(node, visited, set()):
+                    self.errors.append(f"{context}: Circular file dependency detected involving '{node}'")
+                    break
 
     def _check_project_consistency(self):
         """Check project-wide consistency"""

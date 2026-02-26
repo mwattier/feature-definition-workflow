@@ -271,8 +271,10 @@ For prototypes, UI-only changes, config tweaks. Low risk of cross-component brea
 
 **What you skip**:
 - Field-by-field mapping tables
-- STOP gates on every mismatch
 - Per-file /verify-file commands
+- Warning-level STOP gates (naming violations are ignored at this tier)
+
+**Note**: Critical-severity mismatches (type errors, missing required fields, wrong nullability) still trigger STOP even at Lite tier. Lite reduces ceremony, not safety.
 
 ### Standard (Default)
 

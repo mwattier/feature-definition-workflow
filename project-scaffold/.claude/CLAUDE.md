@@ -33,7 +33,7 @@ Follow systematic implementation from [06-IMPLEMENTATION.md](../../06-IMPLEMENTA
 2. Create feature branch: `feature/F001-description`
 3. Research codebase patterns (if applicable)
 4. Create worktree (recommended): `git worktree add ../worktrees/F001 feature/F001-description`
-5. Update features.json status to `in_progress`
+5. Update features.json status to `in-progress`
 
 **For Each Subtask**:
 1. Read subtask

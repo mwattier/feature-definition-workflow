@@ -14,7 +14,7 @@
       "status": "in-progress",
       "priority": "high",
       "feature_doc": "docs/features/product-normalization.md",
-      "dependencies": ["graph-schema", "ingestion-api"],
+      "dependencies": ["graph-schema"],
       "verification": {
         "file": "verification/product-normalization.md",
         "status": "IN_PROGRESS",
