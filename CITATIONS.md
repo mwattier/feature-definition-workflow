@@ -33,8 +33,8 @@ This methodology builds on research and best practices from the AI development c
 ---
 
 **Multi-Context Window Workflows**
-- **Source**: Claude 4 Best Practices Documentation
-- **URL**: https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-4-best-practices#multi-context-window-workflows
+- **Source**: Claude Best Practices Documentation
+- **URL**: https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/extended-thinking-tips
 - **Key Contributions**:
   - Filesystem-based context management
   - Structured progress files
@@ -188,7 +188,7 @@ The underlying research and patterns from Anthropic remain under their respectiv
 ### From Anthropic
 
 - **Building Effective Agents**: https://www.anthropic.com/research/building-effective-agents
-- **Claude 4 Best Practices**: https://docs.anthropic.com/claude/docs/claude-4-best-practices
+- **Claude Best Practices**: https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/extended-thinking-tips
 - **Prompt Engineering Guide**: https://docs.anthropic.com/claude/docs/prompt-engineering
 
 ### Related Topics

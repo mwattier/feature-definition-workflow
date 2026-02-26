@@ -2,7 +2,7 @@
 
 A structured methodology for defining, verifying, and implementing software features with AI assistance. Designed to prevent costly rework by enforcing verification at every step.
 
-**Core Principle**: 15 minutes of conversation and verification prevents hours of rework and hundreds of dollars in wasted AI compute.
+**Core Principle**: A focused conversation (15-60 min depending on complexity) and verification prevents hours of rework and hundreds of dollars in wasted AI compute.
 
 ---
 
@@ -127,7 +127,7 @@ feature-definition-workflow/
 │           └── continue.md
 ├── examples/
 ├── scripts/
-└── extra/
+└── extra/                     # Optional: context management helpers
 ```
 
 ---
@@ -242,14 +242,14 @@ Feature complete
 1. **Copy, don't recall** — Field names and types are copy-pasted from source files
 2. **Show the source** — Every field reference includes file and line number
 3. **Verify dependencies first** — Can't implement file B until file A is verified
-4. **Stop on mismatch** — Never auto-resolve type or naming conflicts
+4. **Stop on mismatch** — Never auto-resolve type conflicts; flag naming violations for review
 5. **Update checklists immediately** — Don't defer verification updates
 
 ### Claude Must Not:
 
 1. Skip verification steps
 2. Generate field names from memory
-3. Auto-resolve mismatches
+3. Auto-resolve type mismatches (naming violations may be auto-fixed per ARCHITECTURE.md conventions)
 4. Implement out of dependency order
 5. Mark files verified without cross-referencing
 
@@ -313,26 +313,53 @@ If you have an existing project:
 
 ---
 
+## Phased Adoption
+
+Don't adopt everything at once. Ramp up over a few weeks:
+
+| Week | What to Add | Why |
+|------|-------------|-----|
+| 1 | Conversation habit + Quick Template | Build the "talk before you code" muscle |
+| 2 | ARCHITECTURE.md | Establish naming/type conventions |
+| 3 | /pre-implement | Start using dependency mapping |
+| 4+ | Full verification as needed | Add rigor where the risk justifies it |
+
+See [HONEST-ASSESSMENT.md](HONEST-ASSESSMENT.md) for more on when to skip the process entirely.
+
+---
+
 ## When Verification Catches Errors
 
-When Claude finds a mismatch:
+Mismatches are classified by severity (see [05-VERIFICATION-WORKFLOW.md](05-VERIFICATION-WORKFLOW.md)):
+
+**Critical (STOP)** — Type mismatches, missing fields, wrong nullability:
 
 ```
-VERIFICATION FAILED: Type mismatch detected
+[CRITICAL] TYPE_MISMATCH: product_id
+  Expected (from ProductSchema in schema/product.py, line 12): UUID
+  Found (in WriterService in services/writer.py, line 45): str
 
-Field: product_id
-Expected (from schema/product.py:12): UUID
-Found (in services/writer.py:45): str
+  Options:
+  A) Update schema to use str
+  B) Update writer to use UUID
+  C) Add explicit conversion
 
-Options:
-A) Update schema to use str
-B) Update writer to use UUID
-C) Add explicit conversion
-
-Action required: Human decision
+  Action required: Human decision
 ```
 
 Claude **stops and waits**. No auto-resolution. The human decides, and the decision is logged.
+
+**Warning (FLAG)** — Naming convention violations:
+
+```
+[WARNING] NAME_MISMATCH: product_name vs productName
+  Convention (from ARCHITECTURE.md): snake_case
+  Proposed fix: Update services/writer.py to use product_name
+
+  Applied fix. Override if incorrect.
+```
+
+Claude applies the fix per ARCHITECTURE.md conventions and continues, unless the fix is ambiguous.
 
 ---
 

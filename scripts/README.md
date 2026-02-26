@@ -6,7 +6,7 @@ Utility scripts for working with features.json and the feature definition workfl
 
 ## validate-features.py
 
-Python script for validating features.json structure and content.
+Python script for validating features.json structure and content. Supports both v1 and v2 features.json formats (version is auto-detected).
 
 ### Features
 

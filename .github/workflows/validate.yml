@@ -1,0 +1,23 @@
+name: Validate features.json examples
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Validate v1 example
+        run: python scripts/validate-features.py templates/features.json.example
+
+      - name: Validate v2 example
+        run: python scripts/validate-features.py templates/features.v2.example.json

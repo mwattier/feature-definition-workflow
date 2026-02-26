@@ -173,7 +173,7 @@ For each file, map:
 ### How to Map
 
 1. **Copy exactly** — Don't type field names from memory
-2. **Include line numbers** — Makes re-verification fast
+2. **Anchor to names** — Reference function/class/type names as primary anchors, line numbers as secondary convenience (line numbers shift as code changes)
 3. **Note the source** — Always trace back to origin
 
 ```markdown
@@ -214,42 +214,55 @@ The reason must be explicit. "It's simple" is not sufficient.
 
 ## When Verification Fails
 
-### Type Mismatch
+### Type Mismatch (Critical - STOP)
 ```markdown
 ## Issues Found
 
 ### Open Issues
-- [ ] TYPE_MISMATCH: `product_id` is `UUID` in schema/product.py:12 
+- [ ] [CRITICAL] TYPE_MISMATCH: `product_id` is `UUID` in schema/product.py:12
       but `str` in services/writer.py:45
-      
+
+      **Severity**: Critical — type mismatches affect runtime correctness
       **Options**:
       A) Update schema to use str
-      B) Update writer to use UUID  
+      B) Update writer to use UUID
       C) Add explicit conversion at line 45
-      
+
       **Waiting for**: Human decision
 ```
 
-### Name Mismatch
+### Name Mismatch (Warning - FLAG)
 ```markdown
-- [ ] NAME_MISMATCH: Field is `product_name` in schema/product.py:13
+- [ ] [WARNING] NAME_MISMATCH: Field is `product_name` in schema/product.py:13
       but `productName` in services/writer.py:46
-      
+
+      **Severity**: Warning — naming convention violation
       **Architectural rule**: Database fields use snake_case (see ARCHITECTURE.md)
-      
-      **Resolution**: Update services/writer.py to use `product_name`
+      **Proposed fix**: Update services/writer.py to use `product_name`
+
+      Applied proposed fix. Override if incorrect.
 ```
 
-### Missing Field
+### Missing Field (Critical - STOP)
 ```markdown
-- [ ] MISSING_FIELD: `created_at` expected by services/reader.py:78
+- [ ] [CRITICAL] MISSING_FIELD: `created_at` expected by services/reader.py:78
       but not present in schema/product.py
-      
+
+      **Severity**: Critical — missing required field
       **Options**:
       A) Add created_at to schema
       B) Remove dependency from reader
-      
+
       **Waiting for**: Human decision
+```
+
+### Unused Field (Info - LOG)
+```markdown
+- [ ] [INFO] UNUSED_FIELD: `updated_at` defined at schema/product.py:15
+      not referenced by any dependent file in this feature
+
+      **Severity**: Info — no action required
+      Logged for awareness.
 ```
 
 ---

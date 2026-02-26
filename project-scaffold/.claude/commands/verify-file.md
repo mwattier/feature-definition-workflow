@@ -78,14 +78,19 @@ Verifying: [field_name]
 Continue to next field.
 
 ### If MISMATCH
+
+Classify severity first:
+
+**Critical (STOP)** — Type mismatches, missing required fields, wrong nullability:
 ```
-VERIFICATION FAILED: Mismatch detected
+VERIFICATION FAILED [CRITICAL]: Mismatch detected
 
 Field: [field_name]
 Expected (from [source]:[line]): [type/name]
 Found (in [target]:[line]): [type/name]
 
-Mismatch type: TYPE | NAME | NULLABILITY
+Severity: CRITICAL — affects runtime correctness
+Mismatch type: TYPE | NULLABILITY | MISSING_FIELD
 
 Options:
 A) Update source to match target
@@ -96,6 +101,21 @@ D) This is intentional (document why)
 Action required: Human decision
 ```
 **STOP** — Do not auto-resolve. Wait for human input.
+
+**Warning (FLAG)** — Naming convention violations, style inconsistencies:
+```
+VERIFICATION WARNING [WARNING]: Convention violation
+
+Field: [field_name]
+Expected (from ARCHITECTURE.md): [convention]
+Found (in [target]:[line]): [actual]
+
+Severity: WARNING — convention violation, not a runtime error
+Proposed fix: [specific fix]
+
+Proceeding with proposed fix unless you object.
+```
+Continue with proposed fix. Log in verification checklist.
 
 ### If NOT FOUND
 ```
@@ -128,17 +148,17 @@ Convention check: [which convention from ARCHITECTURE.md]
 | ProductName | snake_case | ✗ — should be product_name |
 ```
 
-If non-compliant:
+If non-compliant (Warning severity — flag and propose fix):
 ```
-NAMING VIOLATION: [field] does not follow [convention]
+NAMING VIOLATION [WARNING]: [field] does not follow [convention]
 
 Location: [filepath]:[line]
 Current: [current name]
 Expected: [corrected name]
 
-Action required: Fix naming before proceeding
+Proposed fix: Rename to [corrected name]
+Proceeding with fix unless you object.
 ```
-**STOP** — This is not optional.
 
 ---
 
@@ -154,18 +174,18 @@ Type convention check:
 | Timestamp | datetime | str | ✗ |
 ```
 
-If non-compliant:
+If non-compliant (Critical severity — type mismatches affect correctness):
 ```
-TYPE VIOLATION: [field] does not follow type convention
+TYPE VIOLATION [CRITICAL]: [field] does not follow type convention
 
 Location: [filepath]:[line]
 Architecture rule: [rule from ARCHITECTURE.md]
 Current: [current type]
 Expected: [expected type]
 
-Action required: Fix type before proceeding
+Action required: Human decision needed
 ```
-**STOP** — This is not optional.
+**STOP** — Type mismatches are Critical severity. Do not auto-resolve.
 
 ---
 
@@ -232,5 +252,5 @@ Options presented to human. Awaiting decision.
 1. **Never skip a field** — Every field must be verified
 2. **Never auto-resolve mismatches** — Always ask human
 3. **Copy, don't type** — Field names and types are copy-pasted
-4. **Line numbers matter** — Always include them for re-verification
+4. **Anchor to names, not just lines** — Reference function/class/type names alongside line numbers (line numbers shift as code changes)
 5. **Update checklist immediately** — Don't defer updates
