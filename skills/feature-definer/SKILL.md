@@ -429,4 +429,4 @@ The process is successful when:
 
 ---
 
-**Remember**: 15 minutes of conversation beats hours of rework. With v2, we also prevent $400 mistakes through verification. Always define, verify, then build.
+**Remember**: A focused conversation prevents hours of rework. With v2, we also prevent $400 mistakes through verification. Always define, verify, then build.

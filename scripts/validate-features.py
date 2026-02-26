@@ -3,6 +3,7 @@
 validate-features.py
 
 Validates features.json structure and content against expected schema.
+Supports both v1 and v2 features.json formats.
 
 Usage:
     python validate-features.py path/to/features.json
@@ -17,9 +18,12 @@ Features:
 - Progress consistency (0-100, matches status)
 - Date format validation
 - Subtask consistency
+- v2: verification object validation
+- v2: files array validation
 """
 
 import json
+import re
 import sys
 import argparse
 from pathlib import Path
@@ -42,15 +46,25 @@ class FeatureValidator:
     VALID_PRIORITIES = ['critical', 'high', 'medium', 'low']
     VALID_EFFORTS = ['small', 'medium', 'large', 'xlarge']
 
+    V2_STATUSES = ['planned', 'in-progress', 'blocked', 'complete', 'archived']
+    V2_VERIFICATION_STATUSES = ['PENDING', 'IN_PROGRESS', 'VERIFIED', 'BLOCKED', 'NOT_APPLICABLE']
+
     def __init__(self, features_data: Dict[str, Any]):
         self.data = features_data
         self.errors: List[str] = []
         self.warnings: List[str] = []
         self.info: List[str] = []
 
+        # Detect version
+        if self.data.get('version') == '2.0':
+            self.version = 2
+        else:
+            self.version = 1
+
     def validate(self) -> bool:
         """Run all validations. Returns True if valid, False otherwise."""
-        print(f"{Colors.BOLD}Validating features.json...{Colors.END}\n")
+        version_label = f"v{self.version}"
+        print(f"{Colors.BOLD}Validating features.json ({version_label})...{Colors.END}\n")
 
         # Basic structure
         self._check_required_top_level_fields()
@@ -74,10 +88,19 @@ class FeatureValidator:
 
     def _check_required_top_level_fields(self):
         """Check required fields at project level"""
-        required = ['project', 'features']
+        if self.version == 2:
+            required = ['version', 'project', 'features']
+        else:
+            required = ['project', 'features']
+
         for field in required:
             if field not in self.data:
                 self.errors.append(f"Missing required top-level field: '{field}'")
+
+        # v2: project must be an object
+        if self.version == 2 and 'project' in self.data:
+            if not isinstance(self.data['project'], dict):
+                self.errors.append("'project' must be an object in v2 schema")
 
     def _check_features_list(self):
         """Verify features is a list"""
@@ -98,7 +121,11 @@ class FeatureValidator:
             context = f"Feature {feature['id']}"
 
         # Required fields
-        required = ['id', 'name', 'status']
+        if self.version == 2:
+            required = ['id', 'title', 'status', 'verification']
+        else:
+            required = ['id', 'name', 'status']
+
         for field in required:
             if field not in feature:
                 self.errors.append(f"{context}: Missing required field '{field}'")
@@ -108,18 +135,25 @@ class FeatureValidator:
             fid = feature['id']
             if not isinstance(fid, str):
                 self.errors.append(f"{context}: 'id' must be a string")
-            elif not fid.startswith('F'):
-                self.warnings.append(f"{context}: ID should start with 'F' (got: {fid})")
-            elif not fid[1:].isdigit():
-                self.warnings.append(f"{context}: ID should be F followed by digits (got: {fid})")
+            elif self.version == 2:
+                if not re.match(r'^[a-z0-9-]+$', fid):
+                    self.errors.append(
+                        f"{context}: ID must be kebab-case (lowercase alphanumeric and hyphens, got: {fid})"
+                    )
+            else:
+                if not fid.startswith('F'):
+                    self.warnings.append(f"{context}: ID should start with 'F' (got: {fid})")
+                elif not fid[1:].isdigit():
+                    self.warnings.append(f"{context}: ID should be F followed by digits (got: {fid})")
 
         # Status
         if 'status' in feature:
             status = feature['status']
-            if status not in self.VALID_STATUSES:
+            valid = self.V2_STATUSES if self.version == 2 else self.VALID_STATUSES
+            if status not in valid:
                 self.errors.append(
                     f"{context}: Invalid status '{status}'. "
-                    f"Must be one of: {', '.join(self.VALID_STATUSES)}"
+                    f"Must be one of: {', '.join(valid)}"
                 )
 
         # Priority
@@ -131,8 +165,8 @@ class FeatureValidator:
                     f"Must be one of: {', '.join(self.VALID_PRIORITIES)}"
                 )
 
-        # Estimated effort
-        if 'estimatedEffort' in feature:
+        # Estimated effort (v1 only)
+        if self.version == 1 and 'estimatedEffort' in feature:
             effort = feature['estimatedEffort']
             if effort not in self.VALID_EFFORTS:
                 self.errors.append(
@@ -140,8 +174,8 @@ class FeatureValidator:
                     f"Must be one of: {', '.join(self.VALID_EFFORTS)}"
                 )
 
-        # Progress
-        if 'progress' in feature:
+        # Progress (v1 only)
+        if self.version == 1 and 'progress' in feature:
             progress = feature['progress']
             if not isinstance(progress, (int, float)):
                 self.errors.append(f"{context}: 'progress' must be a number")
@@ -180,6 +214,14 @@ class FeatureValidator:
             if not isinstance(blockers, list):
                 self.errors.append(f"{context}: 'blockers' must be an array")
 
+        # v2-only validations
+        if self.version == 2:
+            if 'verification' in feature:
+                self._validate_verification_object(feature['verification'], context)
+
+            if 'files' in feature:
+                self._validate_v2_files(feature['files'], context)
+
     def _validate_date(self, date_str: str, context: str, field: str):
         """Validate date format (YYYY-MM-DD)"""
         if date_str is None:
@@ -209,17 +251,97 @@ class FeatureValidator:
             # Required fields
             if 'id' not in subtask:
                 self.errors.append(f"{sub_context}: Missing 'id'")
-            if 'name' not in subtask:
+            if self.version == 1 and 'name' not in subtask:
                 self.errors.append(f"{sub_context}: Missing 'name'")
             if 'status' not in subtask:
                 self.errors.append(f"{sub_context}: Missing 'status'")
 
             # Status validation
             if 'status' in subtask:
-                if subtask['status'] not in self.VALID_STATUSES:
+                valid = self.V2_STATUSES if self.version == 2 else self.VALID_STATUSES
+                if subtask['status'] not in valid:
                     self.errors.append(
                         f"{sub_context}: Invalid status '{subtask['status']}'"
                     )
+
+    def _validate_verification_object(self, verification: Any, context: str):
+        """Validate v2 verification object"""
+        if not isinstance(verification, dict):
+            self.errors.append(f"{context}: 'verification' must be an object")
+            return
+
+        # Required fields
+        if 'file' not in verification:
+            self.errors.append(f"{context}: verification missing required field 'file'")
+        elif verification['file'] is not None and not isinstance(verification['file'], str):
+            self.errors.append(f"{context}: verification 'file' must be a string or null")
+
+        if 'status' not in verification:
+            self.errors.append(f"{context}: verification missing required field 'status'")
+        elif verification['status'] not in self.V2_VERIFICATION_STATUSES:
+            self.errors.append(
+                f"{context}: Invalid verification status '{verification['status']}'. "
+                f"Must be one of: {', '.join(self.V2_VERIFICATION_STATUSES)}"
+            )
+
+        # Optional integer fields
+        for int_field in ['files_verified', 'files_total', 'blocking_issues']:
+            if int_field in verification:
+                val = verification[int_field]
+                if not isinstance(val, int):
+                    self.errors.append(f"{context}: verification '{int_field}' must be an integer")
+                elif val < 0:
+                    self.errors.append(f"{context}: verification '{int_field}' must be >= 0 (got: {val})")
+
+    def _validate_v2_files(self, files: Any, context: str):
+        """Validate v2 files array"""
+        if not isinstance(files, list):
+            self.errors.append(f"{context}: 'files' must be an array")
+            return
+
+        valid_actions = ['create', 'modify', 'delete']
+
+        for idx, entry in enumerate(files):
+            file_context = f"{context} > File {idx+1}"
+
+            if not isinstance(entry, dict):
+                self.errors.append(f"{file_context}: file entry must be an object")
+                continue
+
+            # Required fields
+            if 'path' not in entry:
+                self.errors.append(f"{file_context}: Missing required field 'path'")
+            elif not isinstance(entry['path'], str):
+                self.errors.append(f"{file_context}: 'path' must be a string")
+
+            if 'verification_status' not in entry:
+                self.errors.append(f"{file_context}: Missing required field 'verification_status'")
+            elif entry['verification_status'] not in self.V2_VERIFICATION_STATUSES:
+                self.errors.append(
+                    f"{file_context}: Invalid verification_status '{entry['verification_status']}'. "
+                    f"Must be one of: {', '.join(self.V2_VERIFICATION_STATUSES)}"
+                )
+
+            # Optional fields
+            if 'action' in entry:
+                if entry['action'] not in valid_actions:
+                    self.errors.append(
+                        f"{file_context}: Invalid action '{entry['action']}'. "
+                        f"Must be one of: {', '.join(valid_actions)}"
+                    )
+
+            if 'depends_on' in entry:
+                if not isinstance(entry['depends_on'], list):
+                    self.errors.append(f"{file_context}: 'depends_on' must be an array")
+                else:
+                    for dep in entry['depends_on']:
+                        if not isinstance(dep, str):
+                            self.errors.append(f"{file_context}: 'depends_on' entries must be strings")
+
+            if 'verified_at' in entry:
+                val = entry['verified_at']
+                if not isinstance(val, str):
+                    self.errors.append(f"{file_context}: 'verified_at' must be a string")
 
     def _check_project_consistency(self):
         """Check project-wide consistency"""
@@ -235,8 +357,13 @@ class FeatureValidator:
 
         # Check progress stats
         total = len(self.data['features'])
-        completed = sum(1 for f in self.data['features'] if f.get('status') == 'completed')
-        in_progress = sum(1 for f in self.data['features'] if f.get('status') == 'in_progress')
+
+        if self.version == 2:
+            completed = sum(1 for f in self.data['features'] if f.get('status') == 'complete')
+            in_progress = sum(1 for f in self.data['features'] if f.get('status') == 'in-progress')
+        else:
+            completed = sum(1 for f in self.data['features'] if f.get('status') == 'completed')
+            in_progress = sum(1 for f in self.data['features'] if f.get('status') == 'in_progress')
 
         self.info.append(f"Total features: {total}")
         self.info.append(f"Completed: {completed} ({completed/total*100:.1f}%)")

@@ -127,13 +127,29 @@ These feature types can use reduced verification:
 
 ### When You Find a Mismatch
 
-Do NOT auto-resolve. Instead:
+Classify severity first (see 05-VERIFICATION-WORKFLOW.md for full definitions):
+
+**Critical (STOP)** — Type mismatches, missing required fields, wrong nullability:
 ```
 1. Document the mismatch in verification checklist
 2. Present options to human
 3. Wait for decision
 4. Document decision in decision log
 5. Then implement resolution
+```
+
+**Warning (FLAG)** — Naming convention violations, style inconsistencies:
+```
+1. Document the violation in verification checklist
+2. Propose fix based on ARCHITECTURE.md conventions
+3. Apply fix and continue (unless ambiguous)
+4. Log in verification checklist
+```
+
+**Info (LOG)** — Unused fields, documentation gaps:
+```
+1. Note in verification checklist
+2. Continue working
 ```
 
 ### When You're Uncertain

@@ -2,7 +2,7 @@
 
 A structured methodology for defining, verifying, and implementing software features with AI assistance. Designed to prevent costly rework by enforcing verification at every step.
 
-**Core Principle**: 15 minutes of conversation and verification prevents hours of rework and hundreds of dollars in wasted AI compute.
+**Core Principle**: A focused conversation (15-60 min depending on complexity) and verification prevents hours of rework and hundreds of dollars in wasted AI compute.
 
 ---
 
@@ -127,7 +127,7 @@ feature-definition-workflow/
 │           └── continue.md
 ├── examples/
 ├── scripts/
-└── extra/
+└── extra/                     # Optional: context management helpers
 ```
 
 ---
@@ -310,6 +310,21 @@ If you have an existing project:
    ```
 
 5. **For in-progress features**, create verification checklists retroactively
+
+---
+
+## Phased Adoption
+
+Don't adopt everything at once. Ramp up over a few weeks:
+
+| Week | What to Add | Why |
+|------|-------------|-----|
+| 1 | Conversation habit + Quick Template | Build the "talk before you code" muscle |
+| 2 | ARCHITECTURE.md | Establish naming/type conventions |
+| 3 | /pre-implement | Start using dependency mapping |
+| 4+ | Full verification as needed | Add rigor where the risk justifies it |
+
+See [HONEST-ASSESSMENT.md](HONEST-ASSESSMENT.md) for more on when to skip the process entirely.
 
 ---
 

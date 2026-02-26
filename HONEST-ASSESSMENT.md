@@ -117,6 +117,19 @@ I use it when:
 
 ---
 
+## Multi-Developer Limitations
+
+This methodology assumes a solo developer or very small team (2-3 people). If you're working with a larger team, be aware of:
+
+- **features.json merge conflicts**: Multiple people editing the same tracking file creates friction. For teams of 3+, you're better off using external PM tools (Linear, Jira, etc.) and keeping features.json as a read-only snapshot.
+- **No concurrent ARCHITECTURE.md model**: Two people modifying the architecture doc simultaneously will conflict. Designate one person as the architecture owner, or use a shared design doc tool.
+- **STOP-and-ask assumes one human**: The verification workflow's "stop and wait for human decision" pattern works when there's one person at the keyboard. On a team, you need to decide who makes the call and how to communicate it.
+- **Verification checklists are per-session**: Checkpoints assume one person resuming their own work. They don't capture what a teammate did in a parallel session.
+
+For teams of 3+, I'd recommend keeping the conversation habit and feature definition process (those scale well) but replacing the JSON tracking and verification commands with your team's existing PM tooling.
+
+---
+
 ## The Anthropic Connection
 
 This methodology builds on Anthropic's published research about long-running agent workflows. I cite them because:
